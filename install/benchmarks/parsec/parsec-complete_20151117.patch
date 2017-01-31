@@ -1,0 +1,4757 @@
+diff -r 68245cfd6d02 -r 7ef72605fc49 PREREQUISITES
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/PREREQUISITES	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,17 @@
++Some benchmarks do not compile out-of-the-box with Clang. For some of them not only source code changes are needed, but also pre-installed libraries.
++
++* raytrace
++
++  * cmake (dependence, in tools/)
++
++    - cmake uses strlcat & strlcpy;
++
++    - Ubuntu needs libbsd-dev
++      ( http://manpages.ubuntu.com/manpages/utopic/man3/strlcpy.3.html )
++
++    - cmake's config file & sources already contain library & headers dependence
++
++  * mesa (dependence, in libs/)
++
++
++    - requires libxt-dev, libxmu-dev
+diff -r 68245cfd6d02 -r 7ef72605fc49 bin/parsecltrace
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/bin/parsecltrace	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,3 @@
++#!/bin/bash
++
++ltrace -c -C $@
+diff -r 68245cfd6d02 -r 7ef72605fc49 bin/parsecperf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/bin/parsecperf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,3 @@
++#!/bin/bash
++
++perf stat -e cycles,instructions $@
+diff -r 68245cfd6d02 -r 7ef72605fc49 bin/parsecperfavx
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/bin/parsecperfavx	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,3 @@
++#!/bin/bash
++
++perf stat -e cycles,instructions -e branches,branch-misses -e r7C6 $@
+diff -r 68245cfd6d02 -r 7ef72605fc49 bin/parsecperfavxmore
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/bin/parsecperfavxmore	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,3 @@
++#!/bin/bash
++
++perf stat -r 5 -e cycles,instructions -e cache-references,cache-misses -e L1-dcache-loads,L1-dcache-load-misses,L1-dcache-stores,L1-dcache-store-misses -e r81D0,r82D0 -e branches,branch-misses -e r7C6 $@
+diff -r 68245cfd6d02 -r 7ef72605fc49 bin/parsecperftx
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/bin/parsecperftx	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,3 @@
++#!/bin/bash
++
++perf stat -e cycles,instructions -e tx-start,tx-commit,tx-abort -e tx-capacity,tx-conflict $@
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/.gcc-pthreads.bldconf.swp
+Binary file config/.gcc-pthreads.bldconf.swp has changed
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,17 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This file contains the global run configuration of all packages for one
++# input set.
++
++# Description of the input set
++run_desc="Huge input for performance analysis on real machines"
++
++# Citations for this input set (requires matching citation file)
++pkg_cite="bienia11parsec"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,10 @@
++#!/bin/bash
++
++# clang-pthreads-nosse.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/config/clang.bldconf
++
++# no SSE/AVX extensions
++CFLAGS="${CFLAGS} -mno-avx -msse -fno-slp-vectorize -fno-vectorize"
++CXXFLAGS="${CXXFLAGS} -mno-avx -msse -fno-slp-vectorize -fno-vectorize"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,13 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing global information necessary to build
++#                          PARSEC with clang and pthreads
++#
++# Copyright (C) 2008 Princeton University
++# Written by Christian Bienia
++
++source ${PARSECDIR}/config/clang.bldconf
++
++# all SSE/AVX extensions
++CFLAGS="${CFLAGS} -msse4.2 -mavx2"
++CXXFLAGS="${CXXFLAGS} -msse4.2 -mavx2"
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,12 @@
++#!/bin/bash
++#
++# clang-serial.bldconf - file containing global information necessary to build
++#                        the serial versions of the PARSEC programs with clang
++#
++# Copyright (C) 2006-2007 Princeton University
++# Written by Christian Bienia
++
++# Global configuration is identical to multi-threaded version
++source ${PARSECDIR}/config/clang.bldconf
++
++PARMACS_MACRO_FILE="serial"
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,126 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing global information necessary to build
++#                 PARSEC with clang
++#
++# Copyright (C) 2006-2009 Princeton University
++# Written by Christian Bienia (Initial version)
++#            Christian Fensch (Sparc/Solaris port)
++
++# Compilation and linking options
++# These are the global options we'll use to build the benchmark suite. Each
++# package also has a local build configuration file defining the exact
++# arguments and environment to use.
++
++
++# Determine OS-specific paths and prefixes
++# We first determine the various directories typically used for the GNU
++# binaries, then we use that information to define the binary locations.
++# The values for Linux are at the end and also the default values.
++
++case "${OSTYPE}" in
++*solaris*)
++  # Solaris case
++
++  # Solaris-specific variables
++  # SFW_HOME is installation root of SFW (Solaris FreeWare)
++  export SFW_HOME="/usr/sfw"
++
++  # CC_HOME is installation root of the C compiler
++  export CC_HOME="/usr/local/gcc-4.2.4"
++  #export CC_HOME="/usr/sfw"
++  # BINUTIL_HOME is installation root of the GNU binutils
++  export BINUTIL_HOME="/usr/sfw"
++  # GNUTOOL_HOME is installation root of the GNU tools
++  export GNUTOOL_HOME="${SFW_HOME}"
++  # BINARY_PREFIX is the string which is used as prefix for the GNU binaries
++  export BINARY_PREFIX="g"
++;;
++*)
++  # Linux + default case
++
++  # CC_HOME is installation root of the C compiler
++  export CC_HOME="/usr"
++  # LLVM_HOME is installation root of the LLVM suite
++  export LLVM_HOME="${HOME}/bin/llvm/build"
++  # BINUTIL_HOME is installation root of the GNU binutils
++  export BINUTIL_HOME="/usr"
++  # GNUTOOL_HOME is installation root of the GNU tools
++  export GNUTOOL_HOME="/usr"
++  # BINARY_PREFIX is the string which is used as prefix for the GNU binaries
++  export BINARY_PREFIX=""
++;;
++esac
++
++# Compilers and preprocessors
++export CC="${LLVM_HOME}/bin/clang"
++export CXX="${LLVM_HOME}/bin/clang++"
++export CPP="${CC_HOME}/bin/cpp"
++export CXXCPP=""
++
++# GNU Binutils
++export LD="${BINUTIL_HOME}/bin/${BINARY_PREFIX}ld"
++export AS="${BINUTIL_HOME}/bin/${BINARY_PREFIX}as"
++export AR="${BINUTIL_HOME}/bin/${BINARY_PREFIX}ar"
++export RANLIB=/bin/true
++export STRIP="${BINUTIL_HOME}/bin/${BINARY_PREFIX}strip"
++
++# GNU Tools
++export M4="${GNUTOOL_HOME}/bin/${BINARY_PREFIX}m4"
++export MAKE="${GNUTOOL_HOME}/bin/${BINARY_PREFIX}make"
++
++# Flags for increased portability of binaries
++PORTABILITY_FLAGS="-Wl,-plugin-opt=save-temps,--hash-style=both,--as-needed"
++
++# Arguments to use
++export CFLAGS="-O3 -mrtm -flto -funroll-loops -fno-builtin -U__OPTIMIZE__ -D__NO_CTYPE=1 ${PORTABILITY_FLAGS}"
++export CXXFLAGS="-O3 -mrtm -flto -funroll-loops -fno-builtin -U__OPTIMIZE__ -D__NO_CTYPE=1 -fpermissive -fno-exceptions ${PORTABILITY_FLAGS}"
++export CPPFLAGS=""
++export CXXCPPFLAGS=""
++export LDFLAGS="-L${CC_HOME}/lib64 -L${CC_HOME}/lib -flto -Wl,-plugin-opt=save-temps,--hash-style=both,--as-needed"
++export LIBS=""
++export EXTRA_LIBS=""
++export PARMACS_MACRO_FILE="pthreads"
++
++
++# OS-specific arguments
++case "${OSTYPE}" in
++*solaris*)
++  CFLAGS="${CFLAGS} -I${SFW_HOME}/include"
++  CXXFLAGS="${CXXFLAGS} -I${SFW_HOME}/include"
++  LDFLAGS="${LDFLAGS} -L${SFW_HOME}/lib"
++  ;;
++esac
++
++# Add PARSEC version to compiler flags
++if [ -f "${PARSECDIR}/version" ]; then
++  CFLAGS="${CFLAGS} -DPARSEC_VERSION=$(${CAT} ${PARSECDIR}/version)"
++  CXXFLAGS="${CXXFLAGS} -DPARSEC_VERSION=$(${CAT} ${PARSECDIR}/version)"
++fi
++
++# Java
++export JAVA_HOME="/usr"
++export JAVAC="${JAVA_HOME}/bin/javac"
++
++# Version numbers
++if [ -x ${CC} ]; then
++  CC_ver=$(${CC} --version)
++else
++  CC_ver=""
++fi
++if [ -x ${CXX} ]; then
++  CXX_ver=$(${CXX} --version)
++else
++  CXX_ver=""
++fi
++if [ -x ${LD} ]; then
++  LD_ver=$(${LD} --version)
++else
++  LD_ver=""
++fi
++if [ -x ${JAVAC} ]; then
++  JAVAC_ver=$(${JAVAC} -version 2>&1)
++else
++  JAVAC_ver=""
++fi
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,9 @@
++#!/bin/bash
++
++# gcc-pthreads-nosse.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/config/gcc-pthreads.bldconf
++
++# no SSE/AVX extensions
++CFLAGS="${CFLAGS} -mno-avx -mno-mmx -mno-sse2 -mno-sse3 -mno-sse4 -mno-sse5 -msse -fno-tree-vectorize"
++CXXFLAGS="${CXXFLAGS} -mno-avx -mno-mmx -mno-sse2 -mno-sse3 -mno-sse4 -mno-sse5 -msse -fno-tree-vectorize"
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,17 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This file contains the global run configuration of all packages for one
++# input set.
++
++# Description of the input set
++run_desc="Huge input for performance analysis on real machines"
++
++# Citations for this input set (requires matching citation file)
++pkg_cite="bienia11parsec"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,17 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This file contains the global run configuration of all packages for one
++# input set.
++
++# Description of the input set
++run_desc="Huge input for performance analysis on real machines"
++
++# Citations for this input set (requires matching citation file)
++pkg_cite="bienia11parsec"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,17 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This file contains the global run configuration of all packages for one
++# input set.
++
++# Description of the input set
++run_desc="Huge input for performance analysis on real machines"
++
++# Citations for this input set (requires matching citation file)
++pkg_cite="bienia11parsec"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 config/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/config/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,17 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This file contains the global run configuration of all packages for one
++# input set.
++
++# Description of the input set
++run_desc="Huge input for performance analysis on real machines"
++
++# Citations for this input set (requires matching citation file)
++pkg_cite="bienia11parsec"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/blackscholes//avxswift/blackscholes"
++
++# Arguments to use
++run_args="${NTHREADS} in_10M.txt prices.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite
++#                          with LLVM and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite
++#                          with LLVM and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/apps/blackscholes/parsec/clang.bldconf
++
++# Override build environment
++build_env="version=serial"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/apps/blackscholes/parsec/clang-pthreads.bldconf
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite
++#                        with gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/blackscholes//native/blackscholes"
++
++# Arguments to use
++run_args="${NTHREADS} in_10M.txt prices.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/blackscholes//native_nosse/blackscholes"
++
++# Arguments to use
++run_args="${NTHREADS} in_10M.txt prices.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/blackscholes//swift/blackscholes"
++
++# Arguments to use
++run_args="${NTHREADS} in_10M.txt prices.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/blackscholes/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/blackscholes//swiftr/blackscholes"
++
++# Arguments to use
++run_args="${NTHREADS} in_10M.txt prices.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/bodytrack//avxswift/bodytrack"
++
++# Arguments to use
++run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,31 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="CXXFLAGS=\"${CXXFLAGS} -fexceptions\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="--enable-threads --disable-openmp --disable-tbb"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,31 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="CXXFLAGS=\"${CXXFLAGS} -fexceptions\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="--enable-threads --disable-openmp --disable-tbb"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/apps/bodytrack/parsec/clang.bldconf
++
++# Override build environment
++build_conf="--disable-threads"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/apps/bodytrack/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,31 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="CXXFLAGS=\"${CXXFLAGS} -fexceptions\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="--enable-threads --disable-openmp --disable-tbb"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/bodytrack//native/bodytrack"
++
++# Arguments to use
++run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/bodytrack//native_nosse/bodytrack"
++
++# Arguments to use
++run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/bodytrack//swift/bodytrack"
++
++# Arguments to use
++run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/bodytrack/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/bodytrack//swiftr/bodytrack"
++
++# Arguments to use
++run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/src/TrackingBenchmark/ParticleFilterPthread.h
+--- a/pkgs/apps/bodytrack/src/TrackingBenchmark/ParticleFilterPthread.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/bodytrack/src/TrackingBenchmark/ParticleFilterPthread.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -133,7 +133,7 @@
+ 			for(i = ticket; i < mNParticles && i < ticket + WORKUNIT_SIZE_NEWPARTICLES; i++) {
+ 				//add new particle for each entry in each bin distributed randomly about duplicated particle
+ 				mNewParticles[i] = mParticles[mIndex[i]];
+-				AddGaussianNoise(mNewParticles[i], mModel->StdDevs()[annealing_parameter], mRnd[i]);
++				this->AddGaussianNoise(mNewParticles[i], mModel->StdDevs()[annealing_parameter], mRnd[i]);
+ 			}
+ 			ticket = particleTickets.getTicket();
+ 		}
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/facesim/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,31 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads PHYSBAM=${PARSECDIR}/pkgs/apps/facesim/obj/${PARSECPLAT} CXXFLAGS=\"${CXXFLAGS} -fexceptions\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/facesim/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,31 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads PHYSBAM=${PARSECDIR}/pkgs/apps/facesim/obj/${PARSECPLAT} CXXFLAGS=\"${CXXFLAGS} -fexceptions\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/facesim/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/apps/facesim/parsec/clang.bldconf
++
++# Environment to use for configure script and Makefile
++build_env="version=serial PHYSBAM=${PARSECDIR}/pkgs/apps/facesim/obj/${PARSECPLAT} CXXFLAGS=\"${CXXFLAGS} -fexceptions\""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/facesim/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/apps/facesim/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/facesim/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,31 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads PHYSBAM=${PARSECDIR}/pkgs/apps/facesim/obj/${PARSECPLAT} CXXFLAGS=\"${CXXFLAGS} -fexceptions\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Benchmarks/facesim/FACE_OPTIMIZATION_GOAL.h
+--- a/pkgs/apps/facesim/src/Benchmarks/facesim/FACE_OPTIMIZATION_GOAL.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Benchmarks/facesim/FACE_OPTIMIZATION_GOAL.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -8,6 +8,7 @@
+ #define __FACE_OPTIMIZATION_GOAL__
+ 
+ #include <iostream>
++#include <stdlib.h>
+ 
+ namespace PhysBAM
+ {
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Arrays/ARRAY.h
+--- a/pkgs/apps/facesim/src/Public_Library/Arrays/ARRAY.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Arrays/ARRAY.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -8,6 +8,7 @@
+ #define __ARRAY__
+ 
+ #include <cstdlib>
++#include <stdio.h>
+ 
+ #include <assert.h>
+ #include <iostream>
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Collisions_And_Interactions/TETRAHEDRON_HIERARCHY.h
+--- a/pkgs/apps/facesim/src/Public_Library/Collisions_And_Interactions/TETRAHEDRON_HIERARCHY.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Collisions_And_Interactions/TETRAHEDRON_HIERARCHY.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -96,28 +96,28 @@
+ 	{
+ 		Calculate_Bounding_Boxes (box_hierarchy);
+ 
+-		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
++		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
+ 	}
+ 
+ 	void Update_Leaf_Boxes (const ARRAY<VECTOR_3D<T> >& X, const T extra_thickness = 0) // use X instead of the current particle positions
+ 	{
+ 		Calculate_Bounding_Boxes (box_hierarchy, X);
+ 
+-		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
++		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
+ 	}
+ 
+ 	void Update_Leaf_Boxes (const ARRAY<VECTOR_3D<T> >& start_X, const ARRAY<VECTOR_3D<T> >& end_X, const T extra_thickness = 0) // bound tetrahedrons moving from start_X to end_X
+ 	{
+ 		Calculate_Bounding_Boxes (box_hierarchy, start_X, end_X);
+ 
+-		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
++		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
+ 	}
+ 
+ 	void Update_Leaf_Boxes (const RIGID_BODY_STATE_3D<T>& start_state, const RIGID_BODY_STATE_3D<T>& end_state, const T extra_thickness = 0) // for a moving rigid body
+ 	{
+ 		Calculate_Bounding_Boxes (box_hierarchy, start_state, end_state);
+ 
+-		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
++		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
+ 	}
+ 
+ 	void Calculate_Bounding_Boxes (ARRAY<BOX_3D<T> >& bounding_boxes)
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_3D.cpp
+--- a/pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_3D.cpp	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_3D.cpp	Tue Nov 17 17:27:10 2015 +0100
+@@ -105,7 +105,7 @@
+ 		LOG::Stop_Time();
+ 		Update_Collision_Penalty_Forces_And_Derivatives();
+ 
+-		if (One_Newton_Step_Toward_Steady_State (cg_tolerance, cg_iterations, time + dt, dX_full, false, 0, iteration == 0) || use_partially_converged_result)
++		if (this->One_Newton_Step_Toward_Steady_State (cg_tolerance, cg_iterations, time + dt, dX_full, false, 0, iteration == 0) || use_partially_converged_result)
+ 			if (PHYSBAM_THREADED_RUN) ARRAY_PARALLEL_OPERATIONS<VECTOR_3D<T>, T, VECTOR_3D<T> >::Add_Scaled_Array_Parallel (dX_full, (T) 1, particles.X.array, *particles.particle_ranges);
+ 
+ #ifndef NEW_SERIAL_IMPLEMENTATIOM
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.cpp
+--- a/pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.cpp	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.cpp	Tue Nov 17 17:27:10 2015 +0100
+@@ -11,6 +11,11 @@
+ template<class T> DEFORMABLE_OBJECT_COLLISIONS_3D<T>* DEFORMABLE_OBJECT_COLLISIONS_3D<T>::m_pointer = NULL;
+ template<class T> T  DEFORMABLE_OBJECT_COLLISIONS_3D<T>::m_dt = (T) 0;
+ 
++
++/* KUVAISKII: Gold linker outputs error "undefined reference to non-virtual thunk..."
++              That has to do with the following methods, those that are inherited from COLLISION_BODY_3D
++              So I moved these implementations in the header
++
+ //#####################################################################
+ // Function Adjust_Nodes_For_Collision_Body_Collisions_Helper_I
+ //#####################################################################
+@@ -123,6 +128,7 @@
+ {
+ 	NOT_IMPLEMENTED();
+ }
++*/
+ 
+ //#####################################################################
+ template class DEFORMABLE_OBJECT_COLLISIONS_3D<float>;
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.h
+--- a/pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -231,21 +231,43 @@
+ 	}
+ 
+ //#####################################################################
+-	int Adjust_Nodes_For_Collision_Body_Collisions (const T dt);
+-	int Adjust_Nodes_For_Collision_Body_Collisions (EMBEDDED_TRIANGULATED_SURFACE<T>& embedded_triangulated_surface, TRIANGLES_OF_MATERIAL_3D<T>& triangles_of_material, const T dt);
++	int Adjust_Nodes_For_Collision_Body_Collisions (const T dt) {
++		NOT_IMPLEMENTED();
++	}
++	int Adjust_Nodes_For_Collision_Body_Collisions (EMBEDDED_TRIANGULATED_SURFACE<T>& embedded_triangulated_surface, TRIANGLES_OF_MATERIAL_3D<T>& triangles_of_material, const T dt) {
++		NOT_IMPLEMENTED();
++	}
+ 	int Adjust_Nodes_For_Collision_Body_Collisions (EMBEDDED_TETRAHEDRALIZED_VOLUME<T>& embedded_tetrahedralized_volume,
+-			EMBEDDED_TETRAHEDRALIZED_VOLUME_BOUNDARY_SURFACE<T>& embedded_tetrahedralized_volume_boundary_surface, const T dt);
+-	int Adjust_Mesh_For_Embedded_Self_Collision (EMBEDDED_TRIANGULATED_SURFACE<T>& embedded_triangulated_surface, TRIANGLES_OF_MATERIAL_3D<T>& triangles_of_material);
++			EMBEDDED_TETRAHEDRALIZED_VOLUME_BOUNDARY_SURFACE<T>& embedded_tetrahedralized_volume_boundary_surface, const T dt) {
++		NOT_IMPLEMENTED();
++	}
++	int Adjust_Mesh_For_Embedded_Self_Collision (EMBEDDED_TRIANGULATED_SURFACE<T>& embedded_triangulated_surface, TRIANGLES_OF_MATERIAL_3D<T>& triangles_of_material) {
++		NOT_IMPLEMENTED();
++	}
+ 	int Adjust_Mesh_For_Embedded_Self_Collision (EMBEDDED_TETRAHEDRALIZED_VOLUME<T>& embedded_tetrahedralized_volume,
+-			EMBEDDED_TETRAHEDRALIZED_VOLUME_BOUNDARY_SURFACE<T>& embedded_tetrahedralized_volume_boundary_surface);
+-	bool Earliest_Triangle_Crossover (const VECTOR_3D<T>& start_X, const VECTOR_3D<T>& end_X, const T dt, T& hit_time, VECTOR_3D<T>& normal, VECTOR_3D<T>& weights, int& triangle_id) const;
++			EMBEDDED_TETRAHEDRALIZED_VOLUME_BOUNDARY_SURFACE<T>& embedded_tetrahedralized_volume_boundary_surface) {
++		NOT_IMPLEMENTED();
++	}
++	bool Earliest_Triangle_Crossover (const VECTOR_3D<T>& start_X, const VECTOR_3D<T>& end_X, const T dt, T& hit_time, VECTOR_3D<T>& normal, VECTOR_3D<T>& weights, int& triangle_id) const {
++		NOT_IMPLEMENTED();
++	}
+ 	bool Latest_Triangle_Crossover (const VECTOR_3D<T>& start_X, const VECTOR_3D<T>& end_X, const T dt, T& hit_time, VECTOR_3D<T>& normal, VECTOR_3D<T>& weights, int& triangle_id,
+-					typename TRIANGLE_3D<T>::POINT_TRIANGLE_COLLISION_TYPE& returned_collision_type) const;
+-	bool Any_Triangle_Crossover (const VECTOR_3D<T>& start_X, const VECTOR_3D<T>& end_X, const T dt) const;
++					typename TRIANGLE_3D<T>::POINT_TRIANGLE_COLLISION_TYPE& returned_collision_type) const {
++		NOT_IMPLEMENTED();
++	}
++	bool Any_Triangle_Crossover (const VECTOR_3D<T>& start_X, const VECTOR_3D<T>& end_X, const T dt) const {
++		NOT_IMPLEMENTED();
++	}
+ 	void Compute_Occupied_Cells (const GRID_3D<T>& grid, ARRAYS_3D<bool>& occupied, const bool with_body_motion, const T extra_thickness, const T body_thickness_factor,
+-				     const bool reset_occupied_to_false = true) const;
+-	void Get_Triangle_Bounding_Boxes (LIST_ARRAY<BOX_3D<T> >& bounding_boxes, const bool with_body_motion, const T extra_thickness, const T body_thickness_factor) const;
+-	void Update_Intersection_Acceleration_Structures (const bool use_swept_triangle_hierarchy, const int state1 = 0, const int state2 = 0);
++				     const bool reset_occupied_to_false = true) const {
++		NOT_IMPLEMENTED();
++	}
++	void Get_Triangle_Bounding_Boxes (LIST_ARRAY<BOX_3D<T> >& bounding_boxes, const bool with_body_motion, const T extra_thickness, const T body_thickness_factor) const {
++		NOT_IMPLEMENTED();
++	}
++	void Update_Intersection_Acceleration_Structures (const bool use_swept_triangle_hierarchy, const int state1 = 0, const int state2 = 0) {
++		NOT_IMPLEMENTED();
++	}
+ //#####################################################################
+ };
+ }
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Geometry/BOX_2D.h
+--- a/pkgs/apps/facesim/src/Public_Library/Geometry/BOX_2D.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Geometry/BOX_2D.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -9,6 +9,7 @@
+ 
+ #include "../Math_Tools/min.h"
+ #include "../Math_Tools/max.h"
++#include "../Math_Tools/clamp.h"
+ #include "../Matrices_And_Vectors/VECTOR_2D.h"
+ #include "../Geometry/SEGMENT_2D.h"
+ #include "../Geometry/RAY_2D.h"
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Makefile.common
+--- a/pkgs/apps/facesim/src/Public_Library/Makefile.common	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Makefile.common	Tue Nov 17 17:27:10 2015 +0100
+@@ -249,7 +249,8 @@
+ # Extra flags defined by user
+ CC_FLAGS += $(EXTRA_DEFS)
+ 
+-LINK_FLAGS += -xW -lm -L$(PHYSBAM_LIBDIR) $(LDFLAGS) $(LIBS)
++# KUVAISKII: removed xW breaking clang
++LINK_FLAGS += -lm -L$(PHYSBAM_LIBDIR) $(LDFLAGS) $(LIBS)
+ 
+ # More type-specific flags (put quotes around strings so "debug" won't match "optdebug"
+ ifneq ($(findstring "$(TYPE)","release" "optdebug" "noalamere"),)
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/DIAGONAL_MATRIX_3X3.h
+--- a/pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/DIAGONAL_MATRIX_3X3.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/DIAGONAL_MATRIX_3X3.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -285,7 +285,6 @@
+ }
+ //#####################################################################
+ }
+-#include "SYMMETRIC_MATRIX_3X3.h"
+ namespace PhysBAM
+ {
+ //#####################################################################
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/MATRIX_3X3.h
+--- a/pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/MATRIX_3X3.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/MATRIX_3X3.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -8,17 +8,20 @@
+ #define __MATRIX_3X3__
+ 
+ #include <assert.h>
++#include <stdlib.h>
+ #include "VECTOR_3D.h"
+ #include "../Math_Tools/sqr.h"
+ #include "../Math_Tools/constants.h"
+ #include "../Math_Tools/exchange.h"
+ #include "UPPER_TRIANGULAR_MATRIX_3X3.h"
+-#include "SYMMETRIC_MATRIX_3X3.h"
++#include "DIAGONAL_MATRIX_3X3.h"
+ #include "MATRIX_NXN.h"
+ #include "MATRIX_MXN.h"
+ namespace PhysBAM
+ {
+ 
++template<class T> class SYMMETRIC_MATRIX_3X3;
++
+ template<class T>
+ class MATRIX_3X3
+ {
+@@ -726,5 +729,8 @@
+ }
+ //#####################################################################
+ }
++
++#include "SYMMETRIC_MATRIX_3X3.h"
++
+ #endif
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/SYMMETRIC_MATRIX_3X3.h
+--- a/pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/SYMMETRIC_MATRIX_3X3.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/SYMMETRIC_MATRIX_3X3.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -9,13 +9,15 @@
+ 
+ #include "VECTOR_3D.h"
+ #include "../Read_Write/READ_WRITE_FUNCTIONS.h"
++
++#include "MATRIX_3X2.h"
++#include "MATRIX_3X3.h"
++#include "DIAGONAL_MATRIX_2X2.h"
++#include "DIAGONAL_MATRIX_3X3.h"
++
+ namespace PhysBAM
+ {
+ 
+-template<class T> class MATRIX_3X3;
+-template<class T> class MATRIX_3X2;
+-template<class T> class DIAGONAL_MATRIX_3X3;
+-template<class T> class DIAGONAL_MATRIX_2X2;
+ template<class T> class UPPER_TRIANGULAR_MATRIX_3X3;
+ 
+ template<class T>
+@@ -379,9 +381,7 @@
+ }
+ //#####################################################################
+ }
+-#include "MATRIX_3X2.h"
+-#include "MATRIX_3X3.h"
+-#include "UPPER_TRIANGULAR_MATRIX_3X3.h"
++
+ namespace PhysBAM
+ {
+ //#####################################################################
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Read_Write/READ_WRITE_FUNCTIONS.h
+--- a/pkgs/apps/facesim/src/Public_Library/Read_Write/READ_WRITE_FUNCTIONS.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Read_Write/READ_WRITE_FUNCTIONS.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -13,6 +13,7 @@
+ #define __READ_WRITE_FUNCTIONS__
+ #include <iostream>
+ #include <assert.h>
++#include <stdlib.h>
+ 
+ namespace PhysBAM
+ {
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Rigid_Bodies/RIGID_BODY_LIST_3D.cpp
+--- a/pkgs/apps/facesim/src/Public_Library/Rigid_Bodies/RIGID_BODY_LIST_3D.cpp	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Rigid_Bodies/RIGID_BODY_LIST_3D.cpp	Tue Nov 17 17:27:10 2015 +0100
+@@ -23,7 +23,7 @@
+ template<class T> int RIGID_BODY_LIST_3D<T>::
+ Add_Rigid_Body (RIGID_BODY_3D<T>* const& rigid_body, const int triangulated_surface_id, const int implicit_surface_id, const int tetrahedralized_volume_id)
+ {
+-	int id = Add_Element (rigid_body);
++	int id = this->Add_Element (rigid_body);
+ 	rigid_body->Set_Id_Number (id);
+ 	assert (!triangulated_surface_id || triangulated_surface_list.Element (triangulated_surface_id));
+ 	assert (!implicit_surface_id || implicit_surface_list.Element (implicit_surface_id));
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Solids_And_Fluids/SOLIDS_FLUIDS_DRIVER_3D.cpp
+--- a/pkgs/apps/facesim/src/Public_Library/Solids_And_Fluids/SOLIDS_FLUIDS_DRIVER_3D.cpp	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Solids_And_Fluids/SOLIDS_FLUIDS_DRIVER_3D.cpp	Tue Nov 17 17:27:10 2015 +0100
+@@ -47,7 +47,7 @@
+ 
+ 	for (current_frame = preroll_frame; current_frame < target_frame; current_frame++)
+ 	{
+-		if (example.write_output_files) Write_Output_Files (current_frame);
++		if (example.write_output_files) this->Write_Output_Files (current_frame);
+ 
+ 		LOG::Push_Scope ("FRAME", "Preroll frame %d", current_frame + 1);
+ 		solids_evolution.Advance_To_Target_Time (Time_At_Frame (current_frame + 1), example.verbose_dt);
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Solids_And_Fluids/SOLIDS_FLUIDS_EXAMPLE.h
+--- a/pkgs/apps/facesim/src/Public_Library/Solids_And_Fluids/SOLIDS_FLUIDS_EXAMPLE.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/facesim/src/Public_Library/Solids_And_Fluids/SOLIDS_FLUIDS_EXAMPLE.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -12,6 +12,7 @@
+ #include "../Read_Write/FILE_UTILITIES.h"
+ #include "../Utilities/DEBUG_UTILITIES.h"
+ #include "../Utilities/STRING_UTILITIES.h"
++#include "../Math_Tools/min.h"
+ namespace PhysBAM
+ {
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/ferret//avxswift/ferret"
++
++# Arguments to use
++run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,33 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="gsl libjpeg"
++
++# Temporary variable with all flags
++ferret_flags="CFLAGS=\"-I${PARSECDIR}/pkgs/libs/gsl/inst/${PARSECPLAT}/include -I${PARSECDIR}/pkgs/libs/libjpeg/inst/${PARSECPLAT}/include ${CFLAGS}\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/gsl/inst/${PARSECPLAT}/lib -L${PARSECDIR}/pkgs/libs/libjpeg/inst/${PARSECPLAT}/lib ${LDFLAGS}\""
++
++# Environment to use for configure script and Makefile
++build_env="version=\"pthreads\" ${ferret_flags}"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,33 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="gsl libjpeg"
++
++# Temporary variable with all flags
++ferret_flags="CFLAGS=\"-I${PARSECDIR}/pkgs/libs/gsl/inst/${PARSECPLAT}/include -I${PARSECDIR}/pkgs/libs/libjpeg/inst/${PARSECPLAT}/include ${CFLAGS}\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/gsl/inst/${PARSECPLAT}/lib -L${PARSECDIR}/pkgs/libs/libjpeg/inst/${PARSECPLAT}/lib ${LDFLAGS}\""
++
++# Environment to use for configure script and Makefile
++build_env="version=\"pthreads\" ${ferret_flags}"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,8 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/apps/ferret/parsec/clang.bldconf
++
++# Environment to use for configure script and Makefile
++# NOTE: $ferret_flags is set in clang.bldconf
++build_env="version=\"serial\" ${ferret_flags}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/apps/ferret/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,33 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="gsl libjpeg"
++
++# Temporary variable with all flags
++ferret_flags="CFLAGS=\"-I${PARSECDIR}/pkgs/libs/gsl/inst/${PARSECPLAT}/include -I${PARSECDIR}/pkgs/libs/libjpeg/inst/${PARSECPLAT}/include ${CFLAGS}\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/gsl/inst/${PARSECPLAT}/lib -L${PARSECDIR}/pkgs/libs/libjpeg/inst/${PARSECPLAT}/lib ${LDFLAGS}\""
++
++# Environment to use for configure script and Makefile
++build_env="version=\"pthreads\" ${ferret_flags}"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/ferret//native/ferret"
++
++# Arguments to use
++run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/ferret//native_nosse/ferret"
++
++# Arguments to use
++run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/ferret//swift/ferret"
++
++# Arguments to use
++run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/ferret/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/ferret//swiftr/ferret"
++
++# Arguments to use
++run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/fluidanimate//avxswift/fluidanimate"
++
++# Arguments to use
++run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/apps/fluidanimate/parsec/clang.bldconf
++
++# Override build environment
++build_env="version=serial"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization model is pthreads
++source ${PARSECDIR}/pkgs/apps/fluidanimate/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/fluidanimate//native/fluidanimate"
++
++# Arguments to use
++run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/fluidanimate//native_nosse/fluidanimate"
++
++# Arguments to use
++run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/fluidanimate//swift/fluidanimate"
++
++# Arguments to use
++run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/fluidanimate/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/fluidanimate//swiftr/fluidanimate"
++
++# Arguments to use
++run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/src/fluid.hpp
+--- a/pkgs/apps/fluidanimate/src/fluid.hpp	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/fluidanimate/src/fluid.hpp	Tue Nov 17 17:27:10 2015 +0100
+@@ -22,10 +22,10 @@
+ 
+ 
+ //Enable to use double precision in program for everything except disk I/O, otherwise single precision is used
+-//#define ENABLE_DOUBLE_PRECISION
++#define ENABLE_DOUBLE_PRECISION
+ 
+ //Our estimate for a cache line size on this machine
+-#define CACHELINE_SIZE 128
++#define CACHELINE_SIZE 64
+ 
+ //Maximum number of particles in a physical cell
+ #define PARTICLES_PER_CELL 16
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/src/parsec_barrier.hpp
+--- a/pkgs/apps/fluidanimate/src/parsec_barrier.hpp	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/fluidanimate/src/parsec_barrier.hpp	Tue Nov 17 17:27:10 2015 +0100
+@@ -20,13 +20,13 @@
+ //use the parsec_barrier* replacement calls without the need to touch the source
+ //code (other than including this header file), but it makes it harder to understand
+ //what is going on
+-#define ENABLE_AUTOMATIC_DROPIN
++//#define ENABLE_AUTOMATIC_DROPIN
+ 
+ //Whether to allow the use of spinning. If enabled then the barrier implementation
+ //will busy-wait on a flag first. After a pre-determined amount of time has passed
+ //without any success it will fall back to waiting on a condition variable. Spinning
+ //will result in unsynchronized memory accesses to the flag.
+-#define ENABLE_SPIN_BARRIER
++//#define ENABLE_SPIN_BARRIER
+ 
+ 
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/freqmine/parsec/clang-openmp.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/freqmine/parsec/clang-openmp.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-openmp.bldconf - file containing information necessary to build a specific
++#                        program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="CXXFLAGS=\"${CXXFLAGS} -fopenmp\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/freqmine/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/freqmine/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/apps/freqmine/parsec/clang.bldconf
++
++# Override build environment
++build_env=""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/freqmine/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/freqmine/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is openmp
++source ${PARSECDIR}/pkgs/apps/freqmine/parsec/clang-openmp.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/raytrace/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/raytrace/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,33 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="cmake mesa"
++
++# Environment to use for configure script and Makefile
++# NOTE: By default PARSEC links raytrace to mesa with Xlib driver so that all
++#       computations are done by the CPU. This requires to also link to the X
++#       libraries and the pthreads library.
++build_env="version=pthreads CXXFLAGS=\"-I${PARSECDIR}/pkgs/libs/mesa/inst/${PARSECPLAT}/include ${CXXFLAGS} -fexceptions -fno-strict-aliasing -fno-align-labels -DNDEBUG -D_MM_NO_ALIGN_CHECK\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/mesa/inst/${PARSECPLAT}/lib ${LDFLAGS}\" LIBS=\"${LIBS} -lGL -lGLU -lXmu -lXext -lXau -lX11 -ldl -lpthread\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/raytrace/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/raytrace/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,33 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="cmake mesa"
++
++# Environment to use for configure script and Makefile
++# NOTE: By default PARSEC links raytrace to mesa with Xlib driver so that all
++#       computations are done by the CPU. This requires to also link to the X
++#       libraries and the pthreads library.
++build_env="version=pthreads CXXFLAGS=\"-I${PARSECDIR}/pkgs/libs/mesa/inst/${PARSECPLAT}/include ${CXXFLAGS} -fexceptions -fno-strict-aliasing -fno-align-labels -DNDEBUG -D_MM_NO_ALIGN_CHECK\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/mesa/inst/${PARSECPLAT}/lib ${LDFLAGS}\" LIBS=\"${LIBS} -lGL -lGLU -lXmu -lXext -lXau -lX11 -ldl -lpthread\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/raytrace/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/raytrace/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,9 @@
++#!/bin/bash
++
++# clang-serial.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/apps/raytrace/parsec/clang.bldconf
++
++# Overwrite default version string
++build_env="${build_env} version=serial"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/raytrace/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/raytrace/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/apps/raytrace/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/raytrace/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/raytrace/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,33 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="cmake mesa"
++
++# Environment to use for configure script and Makefile
++# NOTE: By default PARSEC links raytrace to mesa with Xlib driver so that all
++#       computations are done by the CPU. This requires to also link to the X
++#       libraries and the pthreads library.
++build_env="version=pthreads CXXFLAGS=\"-I${PARSECDIR}/pkgs/libs/mesa/inst/${PARSECPLAT}/include ${CXXFLAGS} -fexceptions -fno-strict-aliasing -fno-align-labels -DNDEBUG -D_MM_NO_ALIGN_CHECK\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/mesa/inst/${PARSECPLAT}/lib ${LDFLAGS}\" LIBS=\"${LIBS} -lGL -lGLU -lXmu -lXext -lXau -lX11 -ldl -lpthread\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/raytrace/src/LRT/FrameBuffer.hxx
+--- a/pkgs/apps/raytrace/src/LRT/FrameBuffer.hxx	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/raytrace/src/LRT/FrameBuffer.hxx	Tue Nov 17 17:27:10 2015 +0100
+@@ -202,7 +202,7 @@
+   if (__builtin_expect(dx == 8 && dy == 8,1))
+     {
+       unsigned int *start = (unsigned int*)&fb_as_int32[y0*res.x+x0];
+-#pragma unroll(8)
++//#pragma unroll(8)
+       //for (int y=0;y<8;y++,start+=res.x) _mm_prefetch((char*)start,_MM_HINT_NTA);
+       return;
+     }
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/swaptions//avxswift/swaptions"
++
++# Arguments to use
++run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/apps/swaptions/parsec/clang.bldconf
++
++# Override build environment
++build_env="version=serial bench=1"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/apps/swaptions/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/swaptions//native/swaptions"
++
++# Arguments to use
++run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/swaptions//native_nosse/swaptions"
++
++# Arguments to use
++run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/swaptions//swift/swaptions"
++
++# Arguments to use
++run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/swaptions/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/swaptions//swiftr/swaptions"
++
++# Arguments to use
++run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,23 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/vips//avxswift/vips"
++
++# VIPS expects the number of threads in an environment variable
++export IM_CONCURRENCY=${NTHREADS}
++
++# Arguments to use
++run_args="im_benchmark orion_18000x18000.v output.v"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,31 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="glib libxml2 zlib"
++
++# Environment to use for configure script and Makefile
++build_env="CXXFLAGS=\"-I${PARSECDIR}/pkgs/libs/glib/inst/${PARSECPLAT}/include -I${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/include ${CXXFLAGS} -fexceptions\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/glib/inst/${PARSECPLAT}/lib -L${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/lib ${LDFLAGS}\" PKG_CONFIG_PATH=\"${PARSECDIR}/pkgs/libs/glib/inst/${PARSECPLAT}/lib/pkgconfig:${PARSECDIR}/pkgs/libs/libxml2/inst/${PARSECPLAT}/lib/pkgconfig:${PKG_CONFIG_PATH}\" LIBS=\"${LIBS} -lstdc++\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++vips_basic_conf="--disable-shared --disable-cxx --without-fftw3 --without-magick --without-liboil --without-lcms --without-OpenEXR --without-matio --without-pangoft2 --without-tiff --without-jpeg --without-zip --without-png --without-libexif --without-python --without-x --without-perl --without-v4l --without-cimg"
++build_conf="${vips_basic_conf} --enable-threads"
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,31 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="glib libxml2 zlib"
++
++# Environment to use for configure script and Makefile
++build_env="CXXFLAGS=\"-I${PARSECDIR}/pkgs/libs/glib/inst/${PARSECPLAT}/include -I${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/include ${CXXFLAGS} -fexceptions\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/glib/inst/${PARSECPLAT}/lib -L${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/lib ${LDFLAGS}\" PKG_CONFIG_PATH=\"${PARSECDIR}/pkgs/libs/glib/inst/${PARSECPLAT}/lib/pkgconfig:${PARSECDIR}/pkgs/libs/libxml2/inst/${PARSECPLAT}/lib/pkgconfig:${PKG_CONFIG_PATH}\" LIBS=\"${LIBS} -lstdc++\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++vips_basic_conf="--disable-shared --disable-cxx --without-fftw3 --without-magick --without-liboil --without-lcms --without-OpenEXR --without-matio --without-pangoft2 --without-tiff --without-jpeg --without-zip --without-png --without-libexif --without-python --without-x --without-perl --without-v4l --without-cimg"
++build_conf="${vips_basic_conf} --enable-threads"
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/apps/vips/parsec/clang.bldconf
++
++# Override configuration
++build_conf="${vips_basic_conf} --disable-threads"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/apps/vips/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,31 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="glib libxml2 zlib"
++
++# Environment to use for configure script and Makefile
++build_env="CXXFLAGS=\"-I${PARSECDIR}/pkgs/libs/glib/inst/${PARSECPLAT}/include -I${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/include ${CXXFLAGS} -fexceptions\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/glib/inst/${PARSECPLAT}/lib -L${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/lib ${LDFLAGS}\" PKG_CONFIG_PATH=\"${PARSECDIR}/pkgs/libs/glib/inst/${PARSECPLAT}/lib/pkgconfig:${PARSECDIR}/pkgs/libs/libxml2/inst/${PARSECPLAT}/lib/pkgconfig:${PKG_CONFIG_PATH}\" LIBS=\"${LIBS} -lstdc++\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++vips_basic_conf="--disable-shared --disable-cxx --without-fftw3 --without-magick --without-liboil --without-lcms --without-OpenEXR --without-matio --without-pangoft2 --without-tiff --without-jpeg --without-zip --without-png --without-libexif --without-python --without-x --without-perl --without-v4l --without-cimg"
++build_conf="${vips_basic_conf} --enable-threads"
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,23 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/vips//native/vips"
++
++# VIPS expects the number of threads in an environment variable
++export IM_CONCURRENCY=${NTHREADS}
++
++# Arguments to use
++run_args="im_benchmark orion_18000x18000.v output.v"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,23 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/vips//native_nosse/vips"
++
++# VIPS expects the number of threads in an environment variable
++export IM_CONCURRENCY=${NTHREADS}
++
++# Arguments to use
++run_args="im_benchmark orion_18000x18000.v output.v"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,23 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/vips//swift/vips"
++
++# VIPS expects the number of threads in an environment variable
++export IM_CONCURRENCY=${NTHREADS}
++
++# Arguments to use
++run_args="im_benchmark orion_18000x18000.v output.v"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/vips/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,23 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/vips//swiftr/vips"
++
++# VIPS expects the number of threads in an environment variable
++export IM_CONCURRENCY=${NTHREADS}
++
++# Arguments to use
++run_args="im_benchmark orion_18000x18000.v output.v"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/x264//avxswift/x264"
++
++# Arguments to use
++run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,40 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++case `arch` in
++    i*86|x86_64)
++	build_deps="yasm"
++    ;;
++    
++    *)
++	build_deps=""
++    ;;
++esac
++
++# Environment to use for configure script and Makefile
++build_env="PATH=\"${PARSECDIR}/pkgs/tools/yasm/inst/${PARSECPLAT}/bin:${PATH}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++# NOTE by dmitry: we disable inline asm because it is poorly supported by Swift
++build_conf="--disable-asm --enable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,40 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++case `arch` in
++    i*86|x86_64)
++	build_deps="yasm"
++    ;;
++    
++    *)
++	build_deps=""
++    ;;
++esac
++
++# Environment to use for configure script and Makefile
++build_env="PATH=\"${PARSECDIR}/pkgs/tools/yasm/inst/${PARSECPLAT}/bin:${PATH}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++# NOTE by dmitry: we disable inline asm because it is poorly supported by Swift
++build_conf="--disable-asm --enable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,8 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/apps/x264/parsec/clang.bldconf
++
++# Override configuration
++# NOTE by dmitry: we disable inline asm because it is poorly supported by Swift
++build_conf="--disable-asm --disable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/apps/x264/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,39 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++case `arch` in
++    i*86|x86_64)
++	build_deps="yasm"
++    ;;
++    
++    *)
++	build_deps=""
++    ;;
++esac
++
++# Environment to use for configure script and Makefile
++build_env="PATH=\"${PARSECDIR}/pkgs/tools/yasm/inst/${PARSECPLAT}/bin:${PATH}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="--disable-asm --enable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/gcc-pthreads.bldconf
+--- a/pkgs/apps/x264/parsec/gcc-pthreads.bldconf	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/x264/parsec/gcc-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -35,5 +35,5 @@
+ build_inplace="TRUE"
+ 
+ # Arguments to pass to the configure script, if it exists
+-build_conf="--enable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
++build_conf="--disable-asm --enable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/gcc-serial.bldconf
+--- a/pkgs/apps/x264/parsec/gcc-serial.bldconf	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/apps/x264/parsec/gcc-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -3,5 +3,5 @@
+ source ${PARSECDIR}/pkgs/apps/x264/parsec/gcc.bldconf
+ 
+ # Override configuration
+-build_conf="--disable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
++build_conf="--disable-asm --disable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/x264//native/x264"
++
++# Arguments to use
++run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/x264//native_nosse/x264"
++
++# Arguments to use
++run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/x264//swift/x264"
++
++# Arguments to use
++run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/apps/x264/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/x264//swiftr/x264"
++
++# Arguments to use
++run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/canneal//avxswift/canneal"
++
++# Arguments to use
++run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/kernels/canneal/parsec/clang.bldconf
++
++# Override build environment
++build_env="version=serial"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/kernels/canneal/parsec/clang-pthreads.bldconf
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/canneal//native/canneal"
++
++# Arguments to use
++run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/canneal//native_nosse/canneal"
++
++# Arguments to use
++run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/canneal//swift/canneal"
++
++# Arguments to use
++run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/canneal/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/canneal//swiftr/canneal"
++
++# Arguments to use
++run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/src/main.cpp
+--- a/pkgs/kernels/canneal/src/main.cpp	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/kernels/canneal/src/main.cpp	Tue Nov 17 17:27:10 2015 +0100
+@@ -138,4 +138,5 @@
+ {
+ 	annealer_thread* ptr = static_cast<annealer_thread*>(data);
+ 	ptr->Run();
++	return (void*) 0;
+ }
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/dedup//avxswift/dedup"
++
++# Arguments to use
++run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="ssl zlib"
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads CFLAGS=\"-I${PARSECDIR}/pkgs/libs/ssl/inst/${PARSECPLAT}/include -I${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/include ${CFLAGS}\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/ssl/inst/${PARSECPLAT}/lib -L${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/lib ${LDFLAGS}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="ssl zlib"
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads CFLAGS=\"-I${PARSECDIR}/pkgs/libs/ssl/inst/${PARSECPLAT}/include -I${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/include ${CFLAGS}\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/ssl/inst/${PARSECPLAT}/lib -L${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/lib ${LDFLAGS}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/kernels/dedup/parsec/clang.bldconf
++
++# Override build environment
++build_env="version=serial"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization is pthreads
++source ${PARSECDIR}/pkgs/kernels/dedup/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="ssl zlib"
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads CFLAGS=\"-I${PARSECDIR}/pkgs/libs/ssl/inst/${PARSECPLAT}/include -I${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/include ${CFLAGS}\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/ssl/inst/${PARSECPLAT}/lib -L${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/lib ${LDFLAGS}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/dedup//native/dedup"
++
++# Arguments to use
++run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/dedup//native_nosse/dedup"
++
++# Arguments to use
++run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/dedup//swift/dedup"
++
++# Arguments to use
++run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/dedup/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/dedup//swiftr/dedup"
++
++# Arguments to use
++run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/src/Makefile
+--- a/pkgs/kernels/dedup/src/Makefile	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/kernels/dedup/src/Makefile	Tue Nov 17 17:27:10 2015 +0100
+@@ -6,6 +6,9 @@
+ 
+ CFLAGS += -Wall -fno-strict-aliasing -D_XOPEN_SOURCE=600
+ 
++# Dmitrii Kuvaiskii: use no asm, otherwise clang chokes
++CFLAGS += -DOPENSSL_NO_ASM -DOPENSSL_NO_INLINE_ASM
++
+ ostype=$(findstring solaris, ${PARSECPLAT})
+ 
+ ifeq "$(ostype)" "solaris"
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/src/mbuffer.c
+--- a/pkgs/kernels/dedup/src/mbuffer.c	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/kernels/dedup/src/mbuffer.c	Tue Nov 17 17:27:10 2015 +0100
+@@ -57,6 +57,7 @@
+ 
+ 
+ //Initialize memory buffer subsystem
++__attribute__ ((noinline))
+ int mbuffer_system_init() {
+ #ifdef ENABLE_PTHREADS
+   int i;
+@@ -80,6 +81,7 @@
+ }
+ 
+ //Shutdown memory buffer subsystem
++__attribute__ ((noinline))
+ int mbuffer_system_destroy() {
+ #ifdef ENABLE_PTHREADS
+   int i, rv;
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/avxswift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/streamcluster//avxswift/streamcluster"
++
++# Arguments to use
++run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang-pthreads.bldconf - file containing information necessary to build a
++#                          specific program of the PARSEC benchmark suite with
++#                          clang and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/kernels/streamcluster/parsec/clang.bldconf
++
++# Override build environment
++build_env="version=serial"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++# clang.bldconf - configuration file for PARSEC
++
++# Default parallelization model is pthreads
++source ${PARSECDIR}/pkgs/kernels/streamcluster/parsec/clang-pthreads.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# gcc-pthreads.bldconf - file containing information necessary to build a
++#                        specific program of the PARSEC benchmark suite with
++#                        gcc and pthreads
++#
++# Copyright (C) 2007-2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="version=pthreads"
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/native-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/streamcluster//native/streamcluster"
++
++# Arguments to use
++run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/native_nosse-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/native_nosse-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/streamcluster//native_nosse/streamcluster"
++
++# Arguments to use
++run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/swift-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/swift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/streamcluster//swift/streamcluster"
++
++# Arguments to use
++run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/swiftr-native.runconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/kernels/streamcluster/parsec/swiftr-native.runconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,20 @@
++#!/bin/bash
++#
++# native.runconf - file containing information necessary to run a specific
++#                  program of the PARSEC benchmark suite
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# This is the information which we need to run the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Binary file to execute, relative to installation root
++run_exec="${COMP_BENCH}/experiments/build/streamcluster//swiftr/streamcluster"
++
++# Arguments to use
++run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/src/parsec_barrier.hpp
+--- a/pkgs/kernels/streamcluster/src/parsec_barrier.hpp	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/kernels/streamcluster/src/parsec_barrier.hpp	Tue Nov 17 17:27:10 2015 +0100
+@@ -20,13 +20,13 @@
+ //use the parsec_barrier* replacement calls without the need to touch the source
+ //code (other than including this header file), but it makes it harder to understand
+ //what is going on
+-#define ENABLE_AUTOMATIC_DROPIN
++//#define ENABLE_AUTOMATIC_DROPIN
+ 
+ //Whether to allow the use of spinning. If enabled then the barrier implementation
+ //will busy-wait on a flag first. After a pre-determined amount of time has passed
+ //without any success it will fall back to waiting on a condition variable. Spinning
+ //will result in unsynchronized memory accesses to the flag.
+-#define ENABLE_SPIN_BARRIER
++//#define ENABLE_SPIN_BARRIER
+ 
+ 
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/src/streamcluster.cpp
+--- a/pkgs/kernels/streamcluster/src/streamcluster.cpp	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/kernels/streamcluster/src/streamcluster.cpp	Tue Nov 17 17:27:10 2015 +0100
+@@ -49,7 +49,7 @@
+ /* higher ITER also scales the running time almost linearly */
+ #define ITER 3 // iterate ITER* k log k times; ITER >= 1
+ 
+-#define CACHE_LINE 32 // cache line in byte
++#define CACHE_LINE 64 // cache line in byte
+ 
+ /* this structure represents a point */
+ /* these will be passed around to avoid copying coordinates */
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/glib/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/glib/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/glib/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/glib/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/glib/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/glib/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/glib/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/glib/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/libs/glib/parsec/clang.bldconf
++
++# Note: We compile with thread support enabled because
++# the serial version of glib is broken.
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/glib/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/glib/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing information necessary to build a specific
++#                 program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="zlib"
++
++# Environment to use for configure script and Makefile
++build_env="CFLAGS=\"-I${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/include ${CFLAGS}\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/lib ${LDFLAGS}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="--disable-shared --enable-threads --with-threads=posix"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/glib/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/glib/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/glib/parsec/gcc.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/gsl/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/gsl/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/gsl/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/gsl/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/gsl/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/gsl/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/gsl/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/gsl/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,4 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/libs/gsl/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/gsl/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/gsl/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing information necessary to build a specific
++#                 program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++# For some reason gsl doesn't add -lm to the link list
++build_env="LIBS=\"${LIBS} -lm\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="--disable-shared"
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/gsl/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/gsl/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/gsl/parsec/gcc.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libjpeg/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libjpeg/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/gsl/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libjpeg/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libjpeg/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/gsl/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libjpeg/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libjpeg/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,4 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/libs/gsl/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libjpeg/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libjpeg/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing information necessary to build a specific
++#                 program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++# For some reason gsl doesn't add -lm to the link list
++build_env=""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="--disable-shared"
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libjpeg/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libjpeg/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/gsl/parsec/gcc.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libxml2/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libxml2/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/libxml2/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libxml2/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libxml2/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/libxml2/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libxml2/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libxml2/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,7 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/libs/libxml2/parsec/clang.bldconf
++
++# Override configuration flags
++build_conf="--disable-shared --without-threads"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libxml2/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libxml2/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,29 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing information necessary to build a specific
++#                 program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps="zlib"
++
++# Environment to use for configure script and Makefile
++build_env="CFLAGS=\"-I${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/include ${CFLAGS}\" LDFLAGS=\"-L${PARSECDIR}/pkgs/libs/zlib/inst/${PARSECPLAT}/lib ${LDFLAGS}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="--disable-shared --with-threads"
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/libxml2/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/libxml2/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/libxml2/parsec/gcc.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/mesa/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/mesa/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/mesa/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/mesa/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/mesa/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/mesa/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/mesa/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/mesa/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,4 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/libs/mesa/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/mesa/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/mesa/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing information necessary to build a specific
++#                 program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2009 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env=""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="--with-driver=xlib --enable-glut --enable-static --disable-shared"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/mesa/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/mesa/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/mesa/parsec/gcc.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/mesa/src/src/mesa/x86-64/xform4.S
+--- a/pkgs/libs/mesa/src/src/mesa/x86-64/xform4.S	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/mesa/src/src/mesa/x86-64/xform4.S	Tue Nov 17 17:27:10 2015 +0100
+@@ -38,7 +38,7 @@
+  *	rdx = source
+  */
+ 	movl V4F_COUNT(%rdx), %ecx	/* count */
+-	movzx V4F_STRIDE(%rdx), %eax	/* stride */
++	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
+ 
+ 	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
+ 	movl $4, V4F_SIZE(%rdi)		/* set dest size */
+@@ -101,7 +101,7 @@
+ .byte  0x00, 0x00, 0x00, 0x00
+ .byte  0x00, 0x00, 0x00, 0x00
+ .byte  0x00, 0x00, 0x00, 0x00
+-.float 0f+1.0
++.float 1.0
+ 
+ .text
+ .align 16
+@@ -120,7 +120,7 @@
+ 	movaps 16(%rax), %xmm10
+ 
+ 	movl V4F_COUNT(%rdx), %ecx	/* count */
+-	movzx V4F_STRIDE(%rdx), %eax	/* stride */
++	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
+ 
+ 	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
+ 	movl $4, V4F_SIZE(%rdi)		/* set dest size */
+@@ -180,7 +180,7 @@
+ _mesa_x86_64_transform_points4_identity:
+ 
+ 	movl V4F_COUNT(%rdx), %ecx	/* count */
+-	movzx V4F_STRIDE(%rdx), %eax	/* stride */
++	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
+ 
+ 	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
+ 	movl $4, V4F_SIZE(%rdi)		/* set dest size */
+@@ -208,7 +208,7 @@
+ _mesa_x86_64_transform_points4_3d_no_rot:
+ 
+ 	movl V4F_COUNT(%rdx), %ecx	/* count */
+-	movzx V4F_STRIDE(%rdx), %eax	/* stride */
++	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
+ 
+ 	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
+ 	movl $4, V4F_SIZE(%rdi)		/* set dest size */
+@@ -272,7 +272,7 @@
+ _mesa_x86_64_transform_points4_perspective:
+ 
+ 	movl V4F_COUNT(%rdx), %ecx	/* count */
+-	movzx V4F_STRIDE(%rdx), %eax	/* stride */
++	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
+ 
+ 	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
+ 	movl $4, V4F_SIZE(%rdi)		/* set dest size */
+@@ -338,7 +338,7 @@
+ _mesa_x86_64_transform_points4_2d_no_rot:
+ 
+ 	movl V4F_COUNT(%rdx), %ecx	/* count */
+-	movzx V4F_STRIDE(%rdx), %eax	/* stride */
++	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
+ 
+ 	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
+ 	movl $4, V4F_SIZE(%rdi)		/* set dest size */
+@@ -393,7 +393,7 @@
+ _mesa_x86_64_transform_points4_2d:
+ 
+ 	movl V4F_COUNT(%rdx), %ecx	/* count */
+-	movzx V4F_STRIDE(%rdx), %eax	/* stride */
++	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
+ 
+ 	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
+ 	movl $4, V4F_SIZE(%rdi)		/* set dest size */
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/ssl/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/ssl/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/ssl/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/ssl/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/ssl/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,4 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/libs/ssl/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/ssl/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing information necessary to build a specific
++#                 program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2009 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="PATH=\"${CC_HOME}/bin:${PATH}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf="threads no-zlib no-shared"
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/ssl/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/ssl/parsec/gcc.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/apps/smime.pod
+--- a/pkgs/libs/ssl/src/doc/apps/smime.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/apps/smime.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -265,28 +265,28 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ the operation was completely successfully.
+ 
+-=item 1 
++=item C<1> 
+ 
+ an error occurred parsing the command options.
+ 
+-=item 2
++=item C<2>
+ 
+ one of the input files could not be read.
+ 
+-=item 3
++=item C<3>
+ 
+ an error occurred creating the PKCS#7 file or when reading the MIME
+ message.
+ 
+-=item 4
++=item C<4>
+ 
+ an error occurred decrypting or verifying the message.
+ 
+-=item 5
++=item C<5>
+ 
+ the message was verified correctly but an error occurred writing out
+ the signers certificates.
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/crypto/rand.pod
+--- a/pkgs/libs/ssl/src/doc/crypto/rand.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/crypto/rand.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -74,16 +74,16 @@
+ 
+ =over 4
+ 
+-=item 1
++=item C<1>
+ 
+ A good hashing algorithm to mix things up and to convert the RNG 'state'
+ to random numbers.
+ 
+-=item 2
++=item C<2>
+ 
+ An initial source of random 'state'.
+ 
+-=item 3
++=item C<3>
+ 
+ The state should be very large.  If the RNG is being used to generate
+ 4096 bit RSA keys, 2 2048 bit random strings are required (at a minimum).
+@@ -93,13 +93,13 @@
+ a bad idea to keep quite a lot of RNG state.  It should be easier to
+ break a cipher than guess the RNG seed data.
+ 
+-=item 4
++=item C<4>
+ 
+ Any RNG seed data should influence all subsequent random numbers
+ generated.  This implies that any random seed data entered will have
+ an influence on all subsequent random numbers generated.
+ 
+-=item 5
++=item C<5>
+ 
+ When using data to seed the RNG state, the data used should not be
+ extractable from the RNG state.  I believe this should be a
+@@ -108,12 +108,12 @@
+ not be disclosed by either subsequent random numbers or a
+ 'core' dump left by a program crash.
+ 
+-=item 6
++=item C<6>
+ 
+ Given the same initial 'state', 2 systems should deviate in their RNG state
+ (and hence the random numbers generated) over time if at all possible.
+ 
+-=item 7
++=item C<7>
+ 
+ Given the random number output stream, it should not be possible to determine
+ the RNG state or the next random number.
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_COMP_add_compression_method.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_COMP_add_compression_method.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_COMP_add_compression_method.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -53,11 +53,11 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ The operation succeeded.
+ 
+-=item 1
++=item C<1>
+ 
+ The operation failed. Check the error queue to find out the reason.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_add_session.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_add_session.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_add_session.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -52,13 +52,13 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+  The operation failed. In case of the add operation, it was tried to add
+  the same (identical) session twice. In case of the remove operation, the
+  session was not found in the cache.
+ 
+-=item 1
++=item C<1>
+  
+  The operation succeeded.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_load_verify_locations.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_load_verify_locations.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_load_verify_locations.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -100,13 +100,13 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ The operation failed because B<CAfile> and B<CApath> are NULL or the
+ processing at one of the locations specified failed. Check the error
+ stack to find out the reason.
+ 
+-=item 1
++=item C<1>
+ 
+ The operation succeeded.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_client_CA_list.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_client_CA_list.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_client_CA_list.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -66,11 +66,11 @@
+ 
+ =over 4
+ 
+-=item 1
++=item C<1>
+ 
+ The operation succeeded.
+ 
+-=item 0
++=item C<0>
+ 
+ A failure while manipulating the STACK_OF(X509_NAME) object occurred or
+ the X509_NAME could not be extracted from B<cacert>. Check the error stack
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_session_id_context.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_session_id_context.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_session_id_context.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -64,13 +64,13 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ The length B<sid_ctx_len> of the session id context B<sid_ctx> exceeded
+ the maximum allowed length of B<SSL_MAX_SSL_SESSION_ID_LENGTH>. The error
+ is logged to the error stack.
+ 
+-=item 1
++=item C<1>
+ 
+ The operation succeeded.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_ssl_version.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_ssl_version.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_ssl_version.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -42,11 +42,11 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ The new choice failed, check the error stack to find out the reason.
+ 
+-=item 1
++=item C<1>
+ 
+ The operation succeeded.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_accept.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_accept.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_accept.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -44,12 +44,12 @@
+ 
+ =over 4
+ 
+-=item 1
++=item C<1>
+ 
+ The TLS/SSL handshake was successfully completed, a TLS/SSL connection has been
+ established.
+ 
+-=item 0
++=item C<0>
+ 
+ The TLS/SSL handshake was not successful but was shut down controlled and
+ by the specifications of the TLS/SSL protocol. Call SSL_get_error() with the
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_clear.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_clear.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_clear.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -50,12 +50,12 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ The SSL_clear() operation could not be performed. Check the error stack to
+ find out the reason.
+ 
+-=item 1
++=item C<1>
+ 
+ The SSL_clear() operation was successful.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_connect.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_connect.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_connect.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -41,12 +41,12 @@
+ 
+ =over 4
+ 
+-=item 1
++=item C<1>
+ 
+ The TLS/SSL handshake was successfully completed, a TLS/SSL connection has been
+ established.
+ 
+-=item 0
++=item C<0>
+ 
+ The TLS/SSL handshake was not successful but was shut down controlled and
+ by the specifications of the TLS/SSL protocol. Call SSL_get_error() with the
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_do_handshake.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_do_handshake.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_do_handshake.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -45,12 +45,12 @@
+ 
+ =over 4
+ 
+-=item 1
++=item C<1>
+ 
+ The TLS/SSL handshake was successfully completed, a TLS/SSL connection has been
+ established.
+ 
+-=item 0
++=item C<0>
+ 
+ The TLS/SSL handshake was not successful but was shut down controlled and
+ by the specifications of the TLS/SSL protocol. Call SSL_get_error() with the
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_read.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_read.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_read.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -86,7 +86,7 @@
+ The read operation was successful; the return value is the number of
+ bytes actually read from the TLS/SSL connection.
+ 
+-=item 0
++=item C<0>
+ 
+ The read operation was not successful. The reason may either be a clean
+ shutdown due to a "close notify" alert sent by the peer (in which case
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_session_reused.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_session_reused.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_session_reused.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -27,11 +27,11 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ A new session was negotiated.
+ 
+-=item 1
++=item C<1>
+ 
+ A session was reused.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_set_fd.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_set_fd.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_set_fd.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -35,11 +35,11 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ The operation failed. Check the error stack to find out why.
+ 
+-=item 1
++=item C<1>
+ 
+ The operation succeeded.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_set_session.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_set_session.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_set_session.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -37,11 +37,11 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ The operation failed; check the error stack to find out the reason.
+ 
+-=item 1
++=item C<1>
+ 
+ The operation succeeded.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_set_shutdown.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_set_shutdown.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_set_shutdown.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -24,7 +24,7 @@
+ 
+ =over 4
+ 
+-=item 0
++=item C<0>
+ 
+ No shutdown setting, yet.
+ 
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_shutdown.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_shutdown.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_shutdown.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -92,12 +92,12 @@
+ 
+ =over 4
+ 
+-=item 1
++=item C<1>
+ 
+ The shutdown was successfully completed. The "close notify" alert was sent
+ and the peer's "close notify" alert was received.
+ 
+-=item 0
++=item C<0>
+ 
+ The shutdown is not yet finished. Call SSL_shutdown() for a second time,
+ if a bidirectional shutdown shall be performed.
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_write.pod
+--- a/pkgs/libs/ssl/src/doc/ssl/SSL_write.pod	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/libs/ssl/src/doc/ssl/SSL_write.pod	Tue Nov 17 17:27:10 2015 +0100
+@@ -79,7 +79,7 @@
+ The write operation was successful, the return value is the number of
+ bytes actually written to the TLS/SSL connection.
+ 
+-=item 0
++=item C<0>
+ 
+ The write operation was not successful. Probably the underlying connection
+ was closed. Call SSL_get_error() with the return value B<ret> to find out,
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/zlib/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/zlib/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/zlib/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/zlib/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/zlib/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/zlib/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/zlib/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/zlib/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,4 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/libs/zlib/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/zlib/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/zlib/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing information necessary to build a specific
++#                 program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2009 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env=""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="TRUE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/zlib/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/libs/zlib/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/libs/zlib/parsec/gcc.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/cmake/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/cmake/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/tools/cmake/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/cmake/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/cmake/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/tools/cmake/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/cmake/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/cmake/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,4 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/tools/cmake/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/cmake/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/cmake/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,29 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing information necessary to build a specific
++#                 program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2008 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++build_env="CXXFLAGS=\"${CXXFLAGS} -fexceptions\" LDFLAGS=\"${LDFLAGS} -lbsd\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/cmake/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/cmake/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/tools/cmake/parsec/gcc.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/cmake/src/Utilities/cmcurl/strequal.c
+--- a/pkgs/tools/cmake/src/Utilities/cmcurl/strequal.c	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/tools/cmake/src/Utilities/cmcurl/strequal.c	Tue Nov 17 17:27:10 2015 +0100
+@@ -23,6 +23,7 @@
+ 
+ #include "setup.h"
+ 
++#include <bsd/string.h>
+ #include <string.h>
+ #include <ctype.h>
+ #ifdef HAVE_STRINGS_H
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/cmake/src/Utilities/cmcurl/strequal.h
+--- a/pkgs/tools/cmake/src/Utilities/cmcurl/strequal.h	Wed Sep 23 11:55:14 2015 +0200
++++ b/pkgs/tools/cmake/src/Utilities/cmcurl/strequal.h	Tue Nov 17 17:27:10 2015 +0100
+@@ -24,6 +24,7 @@
+  ***************************************************************************/
+ 
+ #include <curl/curl.h>
++#include <bsd/string.h>
+ 
+ #define strequal(a,b) curl_strequal(a,b)
+ #define strnequal(a,b,c) curl_strnequal(a,b,c)
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/libtool/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/libtool/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/tools/libtool/parsec/gcc.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/yasm/parsec/clang-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/yasm/parsec/clang-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/tools/yasm/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/yasm/parsec/clang-pthreads.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/yasm/parsec/clang-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# clang-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/tools/yasm/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/yasm/parsec/clang-serial.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/yasm/parsec/clang-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,4 @@
++#!/bin/bash
++
++source ${PARSECDIR}/pkgs/tools/yasm/parsec/clang.bldconf
++
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/yasm/parsec/clang.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/yasm/parsec/clang.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,30 @@
++#!/bin/bash
++#
++# clang.bldconf - file containing information necessary to build a specific
++#                 program of the PARSEC benchmark suite with clang
++#
++# Copyright (C) 2007 Princeton University
++# Written by Christian Bienia
++
++# Compilation and linking options.
++# This is the configuration we'll use to build the program. Each package of the
++# benchmark suite has such a file with information that will be added to the
++# global configuration. All variables set in the global configuration files can
++# be referenced here.
++
++
++# Package dependencies
++build_deps=""
++
++# Environment to use for configure script and Makefile
++# yasm ignores LDFLAGS, add it to libs
++build_env="LIBS=\"${LDFLAGS} ${LIBS}\""
++
++# Whether the build system supports only in-place compilation.
++# If TRUE, then all sources will be copied to the build directory before we
++# start building the package. Required for older build systems which don't
++# support VPATH.
++build_inplace="FALSE"
++
++# Arguments to pass to the configure script, if it exists
++build_conf=""
+diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/yasm/parsec/gcc-pthreads-nosse.bldconf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/pkgs/tools/yasm/parsec/gcc-pthreads-nosse.bldconf	Tue Nov 17 17:27:10 2015 +0100
+@@ -0,0 +1,6 @@
++#!/bin/bash
++
++# gcc-pthreads.bldconf - configuration file for PARSEC
++
++source ${PARSECDIR}/pkgs/tools/yasm/parsec/gcc.bldconf
++

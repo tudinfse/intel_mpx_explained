@@ -1,0 +1,80 @@
+syntax: glob
+
+*.local
+experiments/makefiles/local.mk
+
+# Editors
+.idea/
+*.sublime*
+
+
+# GTAGS
+.tags
+
+*.jpeg
+*.jpg
+*.pdf
+*.txt
+*.bc
+*.ll
+*.d
+*.o
+*.so
+*.lo
+*.so.*
+*.debug
+
+*.out
+*.asm
+*.exe
+*.a
+*.pyc
+
+*.log
+*.err
+*.fuse*
+
+nops.c
+
+# LaTeX
+*.bbl
+*.blg
+*.synctex.gz
+*.aux
+*.fls
+*.fdb_latexmk
+
+
+# == Project ==
+# ignore parsec_libs files that Automake creates
+src/parsec_libs/glib/src/*
+src/parsec_libs/gsl/src/*
+src/parsec_libs/libjpeg/src/*
+src/parsec_libs/libxml2/src/*
+src/parsec_libs/mesa/src/*
+src/parsec_libs/mesa/X11
+src/parsec_libs/ssl/src/*
+src/parsec_libs/zlib/src/*
+
+# working directories
+build/*
+bin/*
+*/build/*
+*/results/*
+tmp/*
+results/*
+*/input/*
+
+# shared directory for Docker
+data*/*
+data/
+
+mng
+!scripts/mng
+
+# re-enable pdfs in the papers
+!publications/memory_protection_survey/figures/*.pdf
+!raw_results/*.log
+
+# ignore statistics - it is changed each time a plot is generated
+*.stats.csv

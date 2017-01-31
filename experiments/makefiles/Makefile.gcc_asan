@@ -1,0 +1,4 @@
+include Makefile.gcc_native
+
+CCOMFLAGS += -fsanitize=address
+LDFLAGS += -fsanitize=address

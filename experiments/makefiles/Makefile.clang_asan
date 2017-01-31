@@ -1,0 +1,4 @@
+include Makefile.clang_native
+
+CCOMFLAGS += -fsanitize=address
+LDFLAGS += -fsanitize=address

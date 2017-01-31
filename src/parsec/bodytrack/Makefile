@@ -1,0 +1,34 @@
+NAME := bodytrack
+SRC := AnnealingFactor BodyGeometry BodyPose CameraModel CovarianceMatrix ImageMeasurements ImageProjection \
+       RandomGenerator TrackingModel main
+
+SUB_DIRS := FlexImageLib
+
+
+ifneq ($(strip $(NUM_THREADS)),1)
+	SRC += AsyncIO TrackingModelPthread
+	SUB_DIRS += threads
+	CCOMFLAGS += -DHAVE_LIBPTHREAD
+endif
+
+SRC += $(SUB_DIRS)
+
+VPATH := src
+INC_DIR += $(COMP_BENCH)/src/parsec/bodytrack/src/FlexImageLib $(COMP_BENCH)/src/parsec/bodytrack/src
+CCOMFLAGS += -DHAVE_CONFIG_H -std=c++98
+CXXFLAGS += -fexceptions
+
+include common.mk
+include $(ACTION_MAKEFILE)
+include ../parsec_common.mk
+
+export  # make sure that makefiles in the subdirectories have the same environment
+
+# enforce build order
+all:
+	@${MAKE} prebuild
+	@${MAKE} $(BUILD_PATH)/$(NAME)
+
+.PHONY: prebuild
+prebuild:
+	$(foreach dir,$(SUB_DIRS),$(MAKE) -C src/$(dir) &&) echo ""

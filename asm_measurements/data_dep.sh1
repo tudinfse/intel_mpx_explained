@@ -1,0 +1,111 @@
+#!/bin/bash
+# Detect CPU specific variables
+. vars.sh
+
+logfile=/dev/stdout
+#logfile=results1/mpx.txt
+
+echo -e "MPX data dependencies\n"  > $logfile
+
+echo -e "\n# 1. Simple load and store" > $logfile
+type=s
+
+for a in load_direct store_direct load_relative store_relative; do
+    echo -e "\n## Argmode: $a"  >> $logfile
+
+    for cts in $PMClist; do
+        $ass -f elf64 -o b64.o -Dargmode=$a -Dtype=$type -Dcounters=$cts -Pdata_dep.inc TemplateB64.nasm
+        if [ $? -ne 0 ] ; then exit ; fi
+        g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -lmpxwrappers -static -fcheck-pointer-bounds
+        if [ $? -ne 0 ] ; then exit ; fi
+        ./x >> $logfile
+    done
+done
+
+echo -e "\n# 2. Checks" > $logfile
+type=c
+
+for a in load_direct load_relative; do
+    echo -e "\n## Argmode: $a"  >> $logfile
+
+    for i in bndcl bndcu; do
+        echo -e "\n### Instruction: $i"  >> $logfile
+
+        for cts in $PMClist; do
+            $ass -f elf64 -o b64.o -Dargmode=$a -Dinstruct=$i -Dtype=$type -Dcounters=$cts -Pdata_dep.inc TemplateB64.nasm
+            if [ $? -ne 0 ] ; then exit ; fi
+            g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -lmpxwrappers -static -fcheck-pointer-bounds
+            if [ $? -ne 0 ] ; then exit ; fi
+            ./x >> $logfile
+        done
+    done
+done
+
+echo -e "\n# 2a. Two checks" > $logfile
+type=cc
+
+for a in load_direct load_relative; do
+    echo -e "\n## Argmode: $a"  >> $logfile
+
+    for cts in $PMClist; do
+        $ass -f elf64 -o b64.o -Dargmode=$a -Dtype=$type -Dcounters=$cts -Pdata_dep.inc TemplateB64.nasm
+        if [ $? -ne 0 ] ; then exit ; fi
+        g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -lmpxwrappers -static -fcheck-pointer-bounds
+        if [ $? -ne 0 ] ; then exit ; fi
+        ./x >> $logfile
+    done
+done
+
+echo -e "\n# 3. Check and access" > $logfile
+type=ca
+
+for a in load_direct store_direct load_relative store_relative; do
+    echo -e "\n## Argmode: $a"  >> $logfile
+
+    for i in bndcl bndcu; do
+        echo -e "\n### Instruction: $i"  >> $logfile
+
+        for cts in $PMClist; do
+            $ass -f elf64 -o b64.o -Dargmode=$a -Dinstruct=$i -Dtype=$type -Dcounters=$cts -Pdata_dep.inc TemplateB64.nasm
+            if [ $? -ne 0 ] ; then exit ; fi
+            g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -lmpxwrappers -static -fcheck-pointer-bounds
+            if [ $? -ne 0 ] ; then exit ; fi
+            ./x >> $logfile
+        done
+    done
+done
+
+echo -e "\n# 4. Two checks and access" > $logfile
+type=cca
+
+for a in load_direct store_direct load_relative store_relative; do
+    echo -e "\n## Argmode: $a"  >> $logfile
+
+    for cts in $PMClist; do
+        $ass -f elf64 -o b64.o -Dargmode=$a -Dtype=$type -Dcounters=$cts -Pdata_dep.inc TemplateB64.nasm
+        if [ $? -ne 0 ] ; then exit ; fi
+        g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -lmpxwrappers -static -fcheck-pointer-bounds
+        if [ $? -ne 0 ] ; then exit ; fi
+        ./x >> $logfile
+    done
+done
+
+
+echo -e "\n# 5. Two checks in reverted order and access" > $logfile
+type=rcca
+
+for a in load_direct store_direct load_relative store_relative; do
+    echo -e "\n## Argmode: $a"  >> $logfile
+
+    for cts in $PMClist; do
+        $ass -f elf64 -o b64.o -Dargmode=$a -Dtype=$type -Dcounters=$cts -Pdata_dep.inc TemplateB64.nasm
+        if [ $? -ne 0 ] ; then exit ; fi
+        g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -lmpxwrappers -static -fcheck-pointer-bounds
+        if [ $? -ne 0 ] ; then exit ; fi
+        ./x >> $logfile
+    done
+done
+
+
+echo -e "\nDone\n"  >> $logfile
+

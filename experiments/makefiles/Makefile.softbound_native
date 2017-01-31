@@ -1,0 +1,11 @@
+# CLANG_SOFTBOUND_PATH and SOFTBOUND_RUNTIME_PATH are defined in local.mk
+# NB! Requires PATH=/gold/binutils/path/bin/:....:/softbound/3.4/path/Release+Asserts/bin/
+#          and LLVM_GOLD=${BIN_PATH}/softboundcets/build/llvm/Release+Asserts/lib/LLVMgold.so
+#          and if there's /usr/bin/clang, it should point to softbound version
+
+include Makefile.clang_native
+
+# change the used LLVM build
+CLANG_PATH := $(CLANG_SOFTBOUND_PATH)
+
+PATH := $(GOLD_PATH)/bin/:$(PATH)

@@ -1,0 +1,5 @@
+include Makefile.icc_native
+
+UTILS := $(COMP_BENCH)/src/util/icc_wrappers/__intel_new_feature_proc_init.c $(UTILS)
+CCOMFLAGS += -check-pointers-mpx=write -no-check-pointers-narrowing
+LIBS    += -lmpx

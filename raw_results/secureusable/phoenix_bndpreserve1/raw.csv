@@ -1,0 +1,15 @@
+name,compiler,type,threads,input,dtlb_store_misses,instructions,dtlb_load_misses,mpxerrors,branch_misses,dtlb_loads,major_faults,time,minor_faults,cycles,branch_instructions,mpxbtnum,dtlb_stores
+string_match,gcc,mpx_first_field,1,test,,,,,,,,,,,,,
+pca,gcc,mpx_first_field,1,test,0,8637977,0,,43133,2343691,0,0.001963517,163,6250942,1493700,,0
+linear_regression,gcc,mpx_first_field,1,test,,,,,,,,,,,,,
+histogram,gcc,mpx_first_field,1,test,,,,,,,,,,,,,
+kmeans,gcc,mpx_first_field,1,test,0,8642744,0,,44679,2306124,0,0.001968171,164,6189043,1522046,,0
+matrix_multiply,gcc,mpx_first_field,1,test,,,,,,,,,,,,,
+word_count,gcc,mpx_first_field,1,test,,,,,,,,,,,,,
+string_match,icc,mpx,1,test,60,7326747295,8445,,10071464,1333254518,0,0.887808395,1048,3367277911,2024754301,,882412181
+pca,icc,mpx,1,test,0,7947814,0,,38839,2067912,0,0.001989691,173,6224154,1436670,,0
+linear_regression,icc,mpx,1,test,87,626788604,6117,,53366,60677214,0,0.049454223,1049,184776144,31039031,,1773878
+histogram,icc,mpx,1,test,57,554800513,7409,,57901,213220278,0,0.081980974,1765,291840235,35047070,,108042637
+kmeans,icc,mpx,1,test,0,8197860,614,,39434,2115243,0,0.002084307,177,6446257,1493829,,0
+matrix_multiply,icc,mpx,1,test,0,9876209,1376,,39398,2693559,0,0.002457032,172,5168231,1817641,,0
+word_count,icc,mpx,1,test,10313,10795252022,269348,,13763440,3771444123,0,2.316943603,4082,8741166066,991513869,,2414262215

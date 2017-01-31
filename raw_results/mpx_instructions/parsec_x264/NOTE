@@ -1,0 +1,4 @@
+GCC finished correctly
+ICC -- segfault in Pin
+
+For this reason, we substituted all ICC statistics with zeros

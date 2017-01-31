@@ -1,0 +1,113 @@
+#!/bin/bash
+#                                                                        2012-01-26 AgF
+# Compile and run PMCTest for integer multiplication instructions
+# looping through list of instructions
+# (c) Copyright 2012 by Agner Fog. GNU General Public License www.gnu.org/licenses
+
+# Detect CPU specific variables
+. vars.sh
+
+logfile=/dev/stdout
+#logfile=results1/mpx.txt
+
+
+echo -e "MPX instructions latency and throughput\n"  > $logfile
+
+echo -e "BNDX <- memory" > $logfile
+for i in bndmk bndcl bndcu bndmov bndldx; do
+#for i in ; do
+    argmode=bm
+    r=64
+
+    echo -e "\n\nLatency: $i"  >> $logfile
+
+    $ass -f elf64 -o b64.o -Dinstruct=$i -Dargmode=$argmode -Dtmode=L -Dregsize=$r -P_mpx.inc TemplateB64.nasm
+    if [ $? -ne 0 ] ; then exit ; fi
+    g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -static -lmpxwrappers -fcheck-pointer-bounds
+    if [ $? -ne 0 ] ; then exit ; fi
+    ./x >> $logfile
+
+    echo -e "\n\nThroughput: $i"  >> $logfile
+    for cts in $PMClist; do
+        $ass -f elf64 -o b64.o -Dinstruct=$i -Dargmode=$argmode -Dtmode=M -Dregsize=$r -Dcounters=$cts -P_mpx.inc TemplateB64.nasm
+        if [ $? -ne 0 ] ; then exit ; fi
+        g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -static -lmpxwrappers -fcheck-pointer-bounds
+        if [ $? -ne 0 ] ; then exit ; fi
+        ./x >> $logfile
+    done
+done
+
+echo -e "BNDX <- register" > $logfile
+for i in bndcl bndcu; do
+#for i in  ; do
+    argmode=br
+    r=64
+
+    echo -e "\n\nLatency: $i"  >> $logfile
+
+    $ass -f elf64 -o b64.o -Dinstruct=$i -Dargmode=$argmode -Dtmode=L -Dregsize=$r -P_mpx.inc TemplateB64.nasm
+    if [ $? -ne 0 ] ; then exit ; fi
+    g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -static -lmpxwrappers -fcheck-pointer-bounds
+    if [ $? -ne 0 ] ; then exit ; fi
+    ./x >> $logfile
+
+    echo -e "\n\nThroughput: $i"  >> $logfile >> $logfile
+    for cts in $PMClist; do
+        $ass -f elf64 -o b64.o -Dinstruct=$i -Dargmode=$argmode -Dtmode=M -Dregsize=$r -Dcounters=$cts -P_mpx.inc TemplateB64.nasm
+        if [ $? -ne 0 ] ; then exit ; fi
+        g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -static -lmpxwrappers -fcheck-pointer-bounds
+        if [ $? -ne 0 ] ; then exit ; fi
+        ./x >> $logfile
+    done
+done
+
+echo -e "BNDX <- BNDX" > $logfile
+for i in bndmov; do
+#for i in  ; do
+    argmode=bb
+    r=64
+
+    echo -e "\n\nLatency: $i"  >> $logfile
+
+    $ass -f elf64 -o b64.o -Dinstruct=$i -Dargmode=$argmode -Dtmode=L -Dregsize=$r -P_mpx.inc TemplateB64.nasm
+    if [ $? -ne 0 ] ; then exit ; fi
+    g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -static -lmpxwrappers -fcheck-pointer-bounds
+    if [ $? -ne 0 ] ; then exit ; fi
+    ./x >> $logfile
+
+    echo -e "\n\nThroughput: $i"  >> $logfile >> $logfile
+    for cts in $PMClist; do
+        $ass -f elf64 -o b64.o -Dinstruct=$i -Dargmode=$argmode -Dtmode=M -Dregsize=$r -Dcounters=$cts -P_mpx.inc TemplateB64.nasm
+        if [ $? -ne 0 ] ; then exit ; fi
+        g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -static -lmpxwrappers -fcheck-pointer-bounds
+        if [ $? -ne 0 ] ; then exit ; fi
+        ./x >> $logfile
+    done
+done
+
+echo -e "MEM <- BNDX" > $logfile
+for i in bndmov bndstx; do
+#for i in ; do
+    argmode=mb
+    r=64
+
+    echo -e "\n\nLatency: $i"  >> $logfile
+
+    $ass -f elf64 -o b64.o -Dinstruct=$i -Dargmode=$argmode -Dtmode=L -Dregsize=$r -P_mpx.inc TemplateB64.nasm
+    if [ $? -ne 0 ] ; then exit ; fi
+    g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -static -lmpxwrappers -fcheck-pointer-bounds
+    if [ $? -ne 0 ] ; then exit ; fi
+    ./x >> $logfile
+
+    echo -e "\n\nThroughput: $i"  >> $logfile >> $logfile
+    for cts in $PMClist; do
+        $ass -f elf64 -o b64.o -Dinstruct=$i -Dargmode=$argmode -Dtmode=M -Dregsize=$r -Dcounters=$cts -P_mpx.inc TemplateB64.nasm
+        if [ $? -ne 0 ] ; then exit ; fi
+        g++ -m64 a64.o b64.o -ox -lpthread -mmpx -lmpx -static -lmpxwrappers -fcheck-pointer-bounds
+        if [ $? -ne 0 ] ; then exit ; fi
+        ./x >> $logfile
+    done
+done
+
+echo -e "\n"  >> $logfile
+

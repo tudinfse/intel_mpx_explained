@@ -1,0 +1,11 @@
+syntax: glob
+
+# ignore inputs
+*.tar
+
+log/*
+toolkit/*
+
+*/inst/*
+*/obj/*
+*/run/*

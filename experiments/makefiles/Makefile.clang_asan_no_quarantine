@@ -1,0 +1,7 @@
+include Makefile.clang_asan
+
+# dummy, no changes in the build process
+# the sole purpose is to have a different build name
+
+# real change - in the 'core/environment.py:ASanEnvironment'
+# quarantine_size_mb must be set to 1
