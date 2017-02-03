@@ -18,6 +18,23 @@ For the details of how to run the experiments on your own, please, refer to the 
 
 Full description of this work can be found in one of the follwing:
 
-* [ATC paper](): shortened form of our investigation (*not yet published*)
-* [Technical Report](): complete results and full discussion (*not yet published*)
+* [ATC paper](): shortened form of our investigation (*not yet submitted*)
+* [Technical Report](https://arxiv.org/abs/1702.00719): complete results and full discussion
 * [Supporting website](https://intel-mpx.github.io/): even more detailed results, but less discussion
+
+
+### Cite us!
+
+Technical Report:
+
+```
+@Article{Oleksenko:2017,
+  author = {Oleksenko, Oleksii and Kuvaiskii, Dmitrii and Bhatotia, Pramod and Felber, Pascal and Fetzer, Christof},,
+  title = {{Intel MPX Explained: An Empirical Study of Intel MPX and Software-based Bounds Checking Approaches}},
+  journal   = "",
+  archivePrefix = "arXiv",
+  eprint = {1702.00719},
+  primaryClass = "",
+  year = {2017},
+}
+```
