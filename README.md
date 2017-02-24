@@ -12,7 +12,21 @@ Also, a set of scripts that prove existence of contention on Port 1.
 
 ### Running the experiments
 
-For the details of how to run the experiments on your own, please, refer to the documentation of the [underlying Fex framework](https://github.com/tudinfse/fex).
+The interface is the same for all the benchmarks:
+
+```sh
+./fex.py run -n benchamark_name -t build_type --stats measurement_tool
+```
+
+For example, to measure performance on Phoenix:
+
+```sh
+./fex.py run -n phoenix_perf -t gcc_native icc_native clang_native gcc_asan gcc_asan_only_write clang_asan gcc_mpx gcc_mpx_only_write gcc_mpx_no_narrow_bounds gcc_mpx_no_narrow_bounds_only_write icc_mpx icc_mpx_only_write icc_mpx_no_narrow_bounds icc_mpx_no_narrow_bounds_only_write softbound_native softbound_enabled safecode_native safecode_enabled --stats perf
+```
+
+For the details of how to run the experiments, refer to the documentation of the [underlying Fex framework](https://github.com/tudinfse/fex).
+Note that this repository uses a bit outdated version of Fex and some things may mismatch.
+In such occasions, please, create an issue or contact me directly.
 
 ### Publications
 
