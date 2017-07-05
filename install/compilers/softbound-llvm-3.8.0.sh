@@ -2,7 +2,7 @@
 
 apt-get install -y unzip
 set -e
-source ${COMP_BENCH}/install/common.sh
+source ${PROJ_ROOT}/install/common.sh
 
 # ============
 # SoftBound

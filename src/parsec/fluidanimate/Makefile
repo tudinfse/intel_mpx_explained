@@ -9,8 +9,7 @@ ifneq ($(strip $(NUM_THREADS)),1)
     SRC += pthreads parsec_barrier
 endif
 
-include common.mk
-include $(ACTION_MAKEFILE)
+include Makefile.$(BUILD_TYPE)
 include ../parsec_common.mk
 
 all: $(BUILD_PATH)/$(NAME)

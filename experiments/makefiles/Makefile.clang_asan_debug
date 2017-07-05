@@ -1,4 +1,0 @@
-include Makefile.clang_native
-
-CCOMFLAGS += -fsanitize=address -fno-omit-frame-pointer
-LDFLAGS += -fsanitize=address -lasan

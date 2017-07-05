@@ -1,0 +1,8 @@
+# CLANG_SOFTBOUND_PATH and SOFTBOUND_RUNTIME_PATH are defined in local.mk
+
+include Makefile.clang_native
+
+CCFLAGS += -g
+
+# change the used LLVM build
+CLANG_PATH := $(CLANG_SAFECODE_PATH)

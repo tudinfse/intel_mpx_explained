@@ -35,7 +35,7 @@ typedef struct _GSignalQuery		 GSignalQuery;
 typedef struct _GSignalInvocationHint	 GSignalInvocationHint;
 /**
  * GSignalCMarshaller:
- * 
+ *
  * This is the signature of marshaller functions, required to marshall
  * arrays of parameter values to signal emissions into C language callback
  * invocations. It is merely an alias to #GClosureMarshal since the #GClosure
@@ -48,17 +48,17 @@ typedef GClosureMarshal			 GSignalCMarshaller;
  * @ihint: Signal invocation hint, see #GSignalInvocationHint.
  * @n_param_values: the number of parameters to the function, including
  *  the instance on which the signal was emitted.
- * @param_values: the instance on which the signal was emitted, followed by the 
+ * @param_values: the instance on which the signal was emitted, followed by the
  *  parameters of the emission.
  * @data: user data associated with the hook.
- * 
- * A simple function pointer to get invoked when the signal is emitted. This 
- * allows you to tie a hook to the signal type, so that it will trap all 
+ *
+ * A simple function pointer to get invoked when the signal is emitted. This
+ * allows you to tie a hook to the signal type, so that it will trap all
  * emissions of that signal, from any object.
- * 
+ *
  * You may not attach these to signals created with the #G_SIGNAL_NO_HOOKS flag.
- * 
- * Returns: whether it wants to stay connected. If it returns %FALSE, the signal 
+ *
+ * Returns: whether it wants to stay connected. If it returns %FALSE, the signal
  *  hook is disconnected (and destroyed).
  */
 typedef gboolean (*GSignalEmissionHook) (GSignalInvocationHint *ihint,
@@ -72,14 +72,14 @@ typedef gboolean (*GSignalEmissionHook) (GSignalInvocationHint *ihint,
  *  is the return value of the current signal emission.
  * @handler_return: A #GValue holding the return value of the signal handler.
  * @data: Callback data that was specified when creating the signal.
- * 
+ *
  * The signal accumulator is a special callback function that can be used
  * to collect return values of the various callbacks that are called
  * during a signal emission. The signal accumulator is specified at signal
  * creation time, if it is left %NULL, no accumulation of callback return
  * values is performed. The return value of signal emissions is then the
  * value returned by the last callback.
- * 
+ *
  * Returns: The accumulator function returns whether the signal emission
  *  should be aborted. Returning %FALSE means to abort the
  *  current emission and %TRUE is returned for continuation.
@@ -105,10 +105,10 @@ typedef gboolean (*GSignalAccumulator)	(GSignalInvocationHint *ihint,
  *  objects from user code via g_signal_emit() and friends, without
  *  the need of being embedded into extra code that performs pre or
  *  post emission adjustments on the object. They can also be thought
- *  of as object methods which can be called generically by 
+ *  of as object methods which can be called generically by
  *  third-party code.
  * @G_SIGNAL_NO_HOOKS: No emissions hooks are supported for this signal.
- * 
+ *
  * The signal flags are used to specify a signal's behaviour, the overall
  * signal description outlines how especially the RUN flags control the
  * stages of a signal emission.
@@ -125,18 +125,18 @@ typedef enum
 } GSignalFlags;
 /**
  * G_SIGNAL_FLAGS_MASK:
- * 
+ *
  * A mask for all #GSignalFlags bits.
  */
 #define G_SIGNAL_FLAGS_MASK  0x7f
 /**
  * GConnectFlags:
- * @G_CONNECT_AFTER: whether the handler should be called before or after the 
+ * @G_CONNECT_AFTER: whether the handler should be called before or after the
  *  default handler of the signal.
  * @G_CONNECT_SWAPPED: whether the instance and data should be swapped when
  *  calling the handler.
- * 
- * The connection flags are used to specify the behaviour of a signal's 
+ *
+ * The connection flags are used to specify the behaviour of a signal's
  * connection.
  */
 typedef enum
@@ -152,7 +152,7 @@ typedef enum
  * @G_SIGNAL_MATCH_FUNC: The C closure callback must be the same.
  * @G_SIGNAL_MATCH_DATA: The closure data must be the same.
  * @G_SIGNAL_MATCH_UNBLOCKED: Only unblocked signals may matched.
- * 
+ *
  * The match types specify what g_signal_handlers_block_matched(),
  * g_signal_handlers_unblock_matched() and g_signal_handlers_disconnect_matched()
  * match signals by.
@@ -168,18 +168,18 @@ typedef enum
 } GSignalMatchType;
 /**
  * G_SIGNAL_MATCH_MASK:
- * 
+ *
  * A mask for all #GSignalMatchType bits.
  */
 #define G_SIGNAL_MATCH_MASK  0x3f
 /**
  * G_SIGNAL_TYPE_STATIC_SCOPE:
- * 
- * This macro flags signal argument types for which the signal system may 
+ *
+ * This macro flags signal argument types for which the signal system may
  * assume that instances thereof remain persistent across all signal emissions
  * they are used in. This is only useful for non ref-counted, value-copy types.
- * 
- * To flag a signal argument in this way, add 
+ *
+ * To flag a signal argument in this way, add
  * <literal>| G_SIGNAL_TYPE_STATIC_SCOPE</literal> to the corresponding argument
  * of g_signal_new().
  * |[
@@ -204,7 +204,7 @@ typedef enum
  * @run_type: The stage the signal emission is currently in, this
  *  field will contain one of %G_SIGNAL_RUN_FIRST,
  *  %G_SIGNAL_RUN_LAST or %G_SIGNAL_RUN_CLEANUP.
- * 
+ *
  * The #GSignalInvocationHint structure is used to pass on additional information
  * to callbacks during a signal emission.
  */
@@ -230,7 +230,7 @@ struct _GSignalInvocationHint
  *  [#param_types param_names,]
  *  #gpointer     data2);
  *  </programlisting>
- * 
+ *
  * A structure holding in-depth information for a specific signal. It is
  * filled in by the g_signal_query() function.
  */
@@ -411,11 +411,11 @@ void   g_signal_chain_from_overridden_handler (gpointer           instance,
  * @detailed_signal: a string of the form "signal-name::detail".
  * @c_handler: the #GCallback to connect.
  * @data: data to pass to @c_handler calls.
- * 
+ *
  * Connects a #GCallback function to a signal for a particular object.
- * 
+ *
  * The handler will be called before the default handler of the signal.
- * 
+ *
  * Returns: the handler id
  */
 #define g_signal_connect(instance, detailed_signal, c_handler, data) \
@@ -426,11 +426,11 @@ void   g_signal_chain_from_overridden_handler (gpointer           instance,
  * @detailed_signal: a string of the form "signal-name::detail".
  * @c_handler: the #GCallback to connect.
  * @data: data to pass to @c_handler calls.
- * 
+ *
  * Connects a #GCallback function to a signal for a particular object.
- * 
+ *
  * The handler will be called after the default handler of the signal.
- * 
+ *
  * Returns: the handler id
  */
 #define g_signal_connect_after(instance, detailed_signal, c_handler, data) \
@@ -441,12 +441,12 @@ void   g_signal_chain_from_overridden_handler (gpointer           instance,
  * @detailed_signal: a string of the form "signal-name::detail".
  * @c_handler: the #GCallback to connect.
  * @data: data to pass to @c_handler calls.
- * 
+ *
  * Connects a #GCallback function to a signal for a particular object.
- * 
- * The instance on which the signal is emitted and @data will be swapped when 
+ *
+ * The instance on which the signal is emitted and @data will be swapped when
  * calling the handler.
- * 
+ *
  * Returns: the handler id
  */
 #define g_signal_connect_swapped(instance, detailed_signal, c_handler, data) \
@@ -456,9 +456,9 @@ void   g_signal_chain_from_overridden_handler (gpointer           instance,
  * @instance: The instance to remove handlers from.
  * @func: The C closure callback of the handlers (useless for non-C closures).
  * @data: The closure data of the handlers' closures.
- * 
+ *
  * Disconnects all handlers on an instance that match @func and @data.
- * 
+ *
  * Returns: The number of handlers that matched.
  */
 #define	g_signal_handlers_disconnect_by_func(instance, func, data)						\
@@ -470,9 +470,9 @@ void   g_signal_chain_from_overridden_handler (gpointer           instance,
  * @instance: The instance to block handlers from.
  * @func: The C closure callback of the handlers (useless for non-C closures).
  * @data: The closure data of the handlers' closures.
- * 
+ *
  * Blocks all handlers on an instance that match @func and @data.
- * 
+ *
  * Returns: The number of handlers that matched.
  */
 #define	g_signal_handlers_block_by_func(instance, func, data)							\
@@ -484,9 +484,9 @@ void   g_signal_chain_from_overridden_handler (gpointer           instance,
  * @instance: The instance to unblock handlers from.
  * @func: The C closure callback of the handlers (useless for non-C closures).
  * @data: The closure data of the handlers' closures.
- * 
+ *
  * Unblocks all handlers on an instance that match @func and @data.
- * 
+ *
  * Returns: The number of handlers that matched.
  */
 #define	g_signal_handlers_unblock_by_func(instance, func, data)							\

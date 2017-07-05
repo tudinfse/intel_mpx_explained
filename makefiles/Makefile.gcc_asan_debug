@@ -1,0 +1,4 @@
+include Makefile.gcc_native
+
+CCFLAGS += -fsanitize=address -fno-omit-frame-pointer
+LDFLAGS += -fsanitize=address -lasan

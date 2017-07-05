@@ -1,6 +1,6 @@
 NAME := FlexImageLib
 SRC := FlexImage FlexIO
 
-CXXFLAGS += -I$(COMP_BENCH)/src/parsec/bodytrack/src/
+CXXFLAGS += -I$(PROJ_ROOT)/src/parsec/bodytrack/src/
 
 include ../subdirs_common.mk

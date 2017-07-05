@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+echo "Installing LLVM..."
+
 #apt-get install -y
 set -e
-source ${COMP_BENCH}/install/common.sh
+source ${PROJ_ROOT}/install/common.sh
 
 # ============
 # LLVM
@@ -54,40 +56,8 @@ make -j8
 make -j8 install
 
 
-# ============
-# Gold Linker
-# ============
-NAME="binutils_gold"
-
-SRC_PATH="${BIN_PATH}/${NAME}/src"
-BUILD_PATH="${BIN_PATH}/${NAME}/build"
-INSTALL_PATH="${BIN_PATH}/${NAME}/install"
-
-# download
-mkdir -p ${BIN_PATH}/${NAME}
-cd /data/
+install_dependency "Gold Linker" "${PROJ_ROOT}/install/dependencies/gold-linker.sh"
 
 set +e
-git clone git://sourceware.org/git/binutils-gdb.git
-set -e
 
-ln -s /data/binutils-gdb ${SRC_PATH}
-
-cd -
-
-# configure
-mkdir -p ${BUILD_PATH}
-cd ${BUILD_PATH}
-${SRC_PATH}/configure --enable-gold --enable-plugins --disable-werror --prefix=${INSTALL_PATH}
-
-# build
-make
-make install
-
-# replace the linker
-rm $INSTALL_PATH/bin/ld
-ln $INSTALL_PATH/bin/ld.gold $INSTALL_PATH/bin/ld
-
-cd -
-
-set +e
+echo "LLVM installed"

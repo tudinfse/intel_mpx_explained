@@ -50,7 +50,7 @@ class BasicStyle:
 
     def axes(self, ax):
         # axes
-        ax.set_axis_bgcolor("white")  # background
+        ax.set_facecolor("white")  # background
         ax.yaxis.label.set_color('black')
         ax.xaxis.label.set_color('black')
 
@@ -168,7 +168,7 @@ class BarplotStyle(BasicStyle):
         self.legend_ncol = legend_ncol
 
         # I din't set it as default attribute value to support situation when caller also had a default value
-        self.legend_loc = legend_loc if legend_loc else (0.005, 0.879)
+        self.legend_loc = legend_loc if legend_loc else (0.005, 0.874)
 
     def ticks(self, ax):
         super(BarplotStyle, self).ticks(ax)
@@ -185,7 +185,9 @@ class BarplotStyle(BasicStyle):
             borderpad=0.2,
             handlelength=0.7,
             fontsize=10,
-
+            edgecolor='white',
+            fancybox=False,
+            framealpha=1,
         )
         l.get_frame().set_facecolor('#ffffff')
 

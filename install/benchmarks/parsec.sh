@@ -2,11 +2,14 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-apt-get install -y pkg-config gettext \
+echo "Installing Parsec..."
+source ${PROJ_ROOT}/install/common.sh
+
+apt-get install -y pkg-config gettext automake \
                    libbsd-dev libx11-dev x11proto-xext-dev libxext-dev libxt-dev libxi-dev libxmu-dev \
                    libglib2.0-dev
 
-echo "=== Downloading inputs ==="
-rsync -r alex@141.76.44.133:shared/inputs/parsec/  "${DATA_PATH}/inputs/parsec/"
-rsync -r alex@141.76.44.133:shared/include/vips/  ${COMP_BENCH}/src/parsec/vips/src/include/
+install_dependency "Parsec inputs" "${PROJ_ROOT}/install/dependencies/parsec_inputs.sh"
+install_dependency "Parsec libraries" "${PROJ_ROOT}/install/dependencies/parsec_libs.sh"
+
 echo "Parsec installed"

@@ -1,3 +1,0 @@
-include Makefile.gcc_mpx
-
-CCOMFLAGS += -fchkp-first-field-has-own-bounds

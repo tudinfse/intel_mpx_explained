@@ -2,19 +2,17 @@
 NAME := nginx
 SRC_PATH := $(BIN_PATH)/nginx/src
 
-SSL_PATH := $(COMP_BENCH)/src/parsec_libs/ssl/src/
+SSL_PATH := $(PROJ_ROOT)/src/libs/ssl/src/
 SSL_OPT := threads no-zlib no-dso no-shared no-test no-apps no-asm
 
-include common.mk
-include $(ACTION_MAKEFILE)
+include Makefile.$(BUILD_TYPE)
 
-CFLAGS += $(CCOMFLAGS)
-CXXFLAGS += $(CCOMFLAGS)
+$(eval $(call expand-ccflags))
 CC := $(CC) $(CFLAGS)  # this is for OpenSSL
 export
 
 CONFIG_OPTS := --with-cc="$(CC)" \
-			   --with-cc-opt="$(INCLUDE) $(INCLUDE_LIB_DIRS)" \
+			   --with-cc-opt="$(INCLUDE_HEADER_DIRS) $(INCLUDE_LIB_DIRS)" \
 			   --with-ld-opt="$(LIBS)" \
 			   --with-openssl=$(SSL_PATH) \
 			   --with-openssl-opt="$(SSL_OPT)"  \

@@ -1,12 +1,18 @@
+"""
+Preparation stage: how results are averaged and aggregated
+
+TODO: this file is in urgent need of cleaning and refactoring
+"""
 import os
 from collections import defaultdict, OrderedDict
 
 from pandas import read_csv, DataFrame, Categorical, Series
 import numpy as np
-from scipy.stats import trim_mean
-from scipy.stats.mstats import mode, gmean, hmean
-
 import logging
+
+import config
+
+conf = config.Config()
 
 
 # taken from http://stackoverflow.com/questions/27424178/faster-way-to-remove-outliers-by-group-in-large-pandas-dataframe
@@ -65,42 +71,7 @@ def process_results(t="perf"):
     :param t: experiment type
     :return: DataFrame with processed data
     """
-    # TODO: revert back to using `cycles` instead of `time` when we fix the bug with BigIntegers
-    columns = {
-        # type: (what to aggregate, what to keep)
-        "perf": (["time"], ["compiler", "type", "name", "input", "threads"]),
-        "multi": (["time"], ["compiler", "type", "name", "input", "threads"]),
-        "perfstacked": (["time"], ["compiler", "type", "name", "input", "threads"]),
-        "mem": (["maxsize"], ["compiler", "type", "name", "input", "threads"]),
-        "tput": (["tput", "lat"], ["compiler", "type", "name", "num_clients", "input", "threads"]),
-        "instr": (["instructions"], ["compiler", "type", "name", "input", "threads"]),
-        "mpxcount": (
-            ["bndldx", "bndstx", "bndmovreg", "bndmovmem", "bndcu", "bndmk", "bndcl", "instructions", "memory_reads", "memory_writes"],
-            ["compiler", "type", "name", "input", "threads"]
-        ),
-        "cache": (
-            ["instructions", "l1_dcache_loads", "l1_dcache_load_misses", "l1_dcache_stores", "l1_dcache_store_misses", "llc_loads", "llc_load_misses", "llc_stores", "llc_store_misses"],
-            ["compiler", "type", "name", "input", "threads"]
-        ),
-        "misc_stat": (
-            ["instructions", "dtlb_stores", "dtlb_store_misses", "dtlb_load_misses", "dtlb_loads", "branch_misses", "branch_instructions"],
-            ["compiler", "type", "name", "input", "threads"]
-        ),
-        "ku_instr": (
-            ["instructions", "instructions:u", "instructions:k"],
-            ["compiler", "type", "name", "input", "threads"]
-        ),
-        "native_mem_access": (
-            ["instructions", "l1_dcache_loads", "l1_dcache_stores"],
-            ["compiler", "type", "name", "input", "threads"]
-        ),
-        "ipc": (
-            ["instructions", "cycles"],
-            ["compiler", "type", "name", "input", "threads"]
-        ),
-        "mpx_feature_perf": (["time"], ["compiler", "type", "name", "input", "threads"]),
-        "mpx_feature_mem": (["maxsize"], ["compiler", "type", "name", "input", "threads"]),
-    }
+    columns = conf.aggregated_data
 
     # get raw data
     (file_name, df) = read_raw()
@@ -194,200 +165,16 @@ def calculate_multithreading_overhead(df, column="time", over=2):
             df.iloc[i] = row  # copy the result into the dataframe
     return df
 
+
 # === Namings and orders ===
-BUILD_NAMES = {
-    "long": {
-        "clang-native":         "Native (Clang)",
-        "safecode-enabled":     "SAFECode (Clang)",
-        "safecode-native":      "Native (SAFECode)",
-        "clang-asan":           "ASan (Clang)",
-        "clang-asan_no_quarantine":           "ASan nq (Clang)",
-        "softbound-enabled":    "SoftBound (Clang)",
-        "softbound-native":     "Native (SoftBound)",
-
-        "icc-native":                          "Native (ICC)",
-        "icc-mpx_no_narrow_bounds_only_write": "MPX n.n.b. o.w. (ICC)",
-        "icc-mpx_no_narrow_bounds":            "MPX n.n.b. (ICC)",
-        "icc-mpx_only_write":                  "MPX o.w. (ICC)",
-        "icc-mpx":                             "MPX (ICC)",
-
-        "gcc-native":                          "Native (GCC)",
-        "gcc-mpx_no_narrow_bounds_only_write": "MPX n.n.b. o.w. (GCC)",
-        "gcc-mpx_no_narrow_bounds":            "MPX n.n.b. (GCC)",
-        "gcc-mpx_only_write":                  "MPX o.w. (GCC)",
-        "gcc-mpx":                             "MPX (GCC)",
-        "gcc-asan":                            "ASan (GCC)",
-        "gcc-asan_only_write":                 "ASan o.w. (GCC)",
-    },
-    "short": {
-        "clang-native":         "Native (Clang)",
-        "safecode-enabled":     "SAFECode",
-        "safecode-native":      "Native (SAFECode)",
-        "clang-asan":           "ASan",
-        "clang-asan_no_quarantine": "ASan nq (Clang)",
-        "softbound-enabled":    "SoftBound",
-        "softbound-native":     "Native (SoftBound)",
-
-        "icc-native":                          "Native (ICC)",
-        "icc-mpx_no_narrow_bounds_only_write": "MPX (ICC)",
-        "icc-mpx_no_narrow_bounds":            "MPX (ICC)",
-        "icc-mpx_only_write":                  "MPX (ICC)",
-        "icc-mpx":                             "MPX (ICC)",
-
-        "gcc-native":                          "Native (GCC)",
-        "gcc-mpx_no_narrow_bounds_only_write": "MPX (GCC)",
-        "gcc-mpx_no_narrow_bounds":            "MPX (GCC)",
-        "gcc-mpx_only_write":                  "MPX (GCC)",
-        "gcc-mpx":                             "MPX (GCC)",
-        "gcc-asan":                            "ASan",
-        "gcc-asan_only_write":                 "ASan",
-    },
-    "tiny": {
-        "Native (Clang)": r"$N$",
-        "SAFECode (Clang)": r"$C$",
-        "ASan (Clang)": r"$A$",
-        "SoftBound (Clang)": r"$B$",
-
-        "Native (ICC)": r"$N$",
-        "MPX n.n.b. (ICC)": r"$I$",
-        "MPX o.w. (ICC)": r"$\bar{I}$",
-        "MPX (ICC)": r"$I$",
-
-        "Native (GCC)": r"$N$",
-        "MPX n.n.b. (GCC)": r"$G$",
-        "MPX o.w. (GCC)": r"$\bar{G}$",
-        "MPX (GCC)": r"$G$",
-        "ASan (GCC)": r"$A$",
-    },
-    "empty": {
-        "clang-native": "",
-        "safecode-enabled": "",
-        "clang-asan": "",
-        "softbound-enabled": "",
-
-        "icc-native": "",
-        "icc-mpx_no_narrow_bounds_only_write": "",
-        "icc-mpx_no_narrow_bounds": "",
-        "icc-mpx_only_write": "",
-        "icc-mpx": "",
-
-        "gcc-native": "",
-        "gcc-mpx_no_narrow_bounds_only_write": "",
-        "gcc-mpx_no_narrow_bounds": "",
-        "gcc-mpx_only_write": "",
-        "gcc-mpx": "",
-        "gcc-asan": "",
-        "gcc-asan_only_write": "",
-    },
-    "mpx_feature": {
-        "icc-native": "Native (ICC)",
-        "icc-mpx_no_narrow_bounds_only_write": "No narrow bounds only write (ICC)",
-        "icc-mpx_no_narrow_bounds": "No narrow bounds (ICC)",
-        "icc-mpx_only_write": "Only write (ICC)",
-        "icc-mpx": "Full (ICC)",
-
-        "gcc-native": "Native (GCC)",
-        "gcc-mpx_no_narrow_bounds_only_write": "No narrow bounds only write (GCC)",
-        "gcc-mpx_no_narrow_bounds": "No narrow bounds (GCC)",
-        "gcc-mpx_only_write": "Only write (GCC)",
-        "gcc-mpx": "Full (GCC)",
-    }
-}
-
-INPUT_NAMES = {
-    "long": {
-        0: "Small",
-        1: "Medium",
-        2: "Large",
-        3: "Extra Large",
-        4: "XXL"
-    },
-    "short": {
-        0: "S",
-        1: "M",
-        2: "L",
-        3: "XL",
-        4: "XXL"
-    }
-}
-
-DEFAULT_BUILD_ORDER = (
-    "clang-asan",
-    "clang-asan_no_quarantine",
-    "icc-mpx",
-    "gcc-mpx",
-    "safecode-enabled",
-    "softbound-enabled",
-)
-OTHER_BUILD_ORDERS = {
-    "mpxcount": (
-        "icc-mpx",
-        "icc-mpx_only_write",
-        "gcc-mpx",
-        "gcc-mpx_only_write",
-    ),
-    "multi": (
-        "gcc-native",
-        "clang-asan",
-        "icc-mpx",
-        "gcc-mpx",
-    ),
-    "native_mem_access": (
-        "clang-native",
-        "icc-native",
-        "gcc-native",
-        "safecode-native",
-        "softbound-native",
-    ),
-    "ipc": (
-        "gcc-native",
-        "clang-asan",
-        "icc-mpx",
-        "gcc-mpx",
-        "safecode-enabled",
-        "softbound-enabled",
-    ),
-    "cache": (
-        "gcc-native",
-        "clang-asan",
-        "icc-mpx",
-        "gcc-mpx",
-        "safecode-enabled",
-        "softbound-enabled",
-    ),
-    "mpx_feature_perf": (
-        "icc-mpx",
-        "icc-mpx_no_narrow_bounds",
-        "icc-mpx_only_write",
-        "gcc-mpx",
-        "gcc-mpx_no_narrow_bounds",
-        "gcc-mpx_only_write",
-    ),
-    "mpx_feature_mem": (
-        "icc-mpx",
-        "icc-mpx_no_narrow_bounds",
-        "icc-mpx_only_write",
-        "gcc-mpx",
-        "gcc-mpx_no_narrow_bounds",
-        "gcc-mpx_only_write",
-    ),
-    "tput": (
-        "gcc-native",
-        "gcc-asan",
-        "icc-mpx_no_narrow_bounds",
-        "gcc-mpx_no_narrow_bounds",
-    ),
-}
-
-
 def rename_build(df, long=True):
-    columns = BUILD_NAMES["long"] if long else BUILD_NAMES["short"]
+    columns = conf.build_names["long"] if long else conf.build_names["short"]
     df.rename(columns=columns, inplace=True)
 
 
 def reorder_compilers(df, t):
-    orders = defaultdict(list, **OTHER_BUILD_ORDERS)
-    orders.default_factory = lambda: DEFAULT_BUILD_ORDER
+    orders = defaultdict(list, **conf.other_build_orders)
+    orders.default_factory = lambda: conf.default_build_order
     df["compilertype"] = Categorical(df["compilertype"], orders[t], ordered=True)
     df.sort_values(["compilertype"], inplace=True)
 

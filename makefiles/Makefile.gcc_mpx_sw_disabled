@@ -1,0 +1,4 @@
+include Makefile.gcc_mpx
+
+LIB_DIRS := /usr/libdummy/ $(LIB_DIRS)
+

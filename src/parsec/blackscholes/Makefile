@@ -3,11 +3,9 @@ SRC := blackscholes
 
 VPATH := src
 
-CFLAGS += -DNCO=2 -DN=960
-CXXFLAGS += -DNCO=2 -DN=960
+CCFLAGS += -DNCO=2 -DN=960
 
-include common.mk
-include $(ACTION_MAKEFILE)
+include Makefile.$(BUILD_TYPE)
 include ../parsec_common.mk
 
 all: $(BUILD_PATH)/$(NAME)

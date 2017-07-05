@@ -370,7 +370,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/avxswift-nati
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/blackscholes//avxswift/blackscholes"
++run_exec="${PROJ_ROOT}/experiments/build/blackscholes//avxswift/blackscholes"
 +
 +# Arguments to use
 +run_args="${NTHREADS} in_10M.txt prices.txt"
@@ -517,7 +517,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/native-native
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/blackscholes//native/blackscholes"
++run_exec="${PROJ_ROOT}/experiments/build/blackscholes//native/blackscholes"
 +
 +# Arguments to use
 +run_args="${NTHREADS} in_10M.txt prices.txt"
@@ -541,7 +541,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/native_nosse-
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/blackscholes//native_nosse/blackscholes"
++run_exec="${PROJ_ROOT}/experiments/build/blackscholes//native_nosse/blackscholes"
 +
 +# Arguments to use
 +run_args="${NTHREADS} in_10M.txt prices.txt"
@@ -565,7 +565,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/swift-native.
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/blackscholes//swift/blackscholes"
++run_exec="${PROJ_ROOT}/experiments/build/blackscholes//swift/blackscholes"
 +
 +# Arguments to use
 +run_args="${NTHREADS} in_10M.txt prices.txt"
@@ -589,7 +589,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/blackscholes/parsec/swiftr-native
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/blackscholes//swiftr/blackscholes"
++run_exec="${PROJ_ROOT}/experiments/build/blackscholes//swiftr/blackscholes"
 +
 +# Arguments to use
 +run_args="${NTHREADS} in_10M.txt prices.txt"
@@ -613,7 +613,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/avxswift-native.
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/bodytrack//avxswift/bodytrack"
++run_exec="${PROJ_ROOT}/experiments/build/bodytrack//avxswift/bodytrack"
 +
 +# Arguments to use
 +run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
@@ -764,7 +764,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/native-native.ru
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/bodytrack//native/bodytrack"
++run_exec="${PROJ_ROOT}/experiments/build/bodytrack//native/bodytrack"
 +
 +# Arguments to use
 +run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
@@ -788,7 +788,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/native_nosse-nat
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/bodytrack//native_nosse/bodytrack"
++run_exec="${PROJ_ROOT}/experiments/build/bodytrack//native_nosse/bodytrack"
 +
 +# Arguments to use
 +run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
@@ -812,7 +812,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/swift-native.run
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/bodytrack//swift/bodytrack"
++run_exec="${PROJ_ROOT}/experiments/build/bodytrack//swift/bodytrack"
 +
 +# Arguments to use
 +run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
@@ -836,7 +836,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/bodytrack/parsec/swiftr-native.ru
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/bodytrack//swiftr/bodytrack"
++run_exec="${PROJ_ROOT}/experiments/build/bodytrack//swiftr/bodytrack"
 +
 +# Arguments to use
 +run_args="sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
@@ -985,10 +985,10 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Benchmarks/facesim/FA
 +++ b/pkgs/apps/facesim/src/Benchmarks/facesim/FACE_OPTIMIZATION_GOAL.h	Tue Nov 17 17:27:10 2015 +0100
 @@ -8,6 +8,7 @@
  #define __FACE_OPTIMIZATION_GOAL__
- 
+
  #include <iostream>
 +#include <stdlib.h>
- 
+
  namespace PhysBAM
  {
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Arrays/ARRAY.h
@@ -996,10 +996,10 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Arrays
 +++ b/pkgs/apps/facesim/src/Public_Library/Arrays/ARRAY.h	Tue Nov 17 17:27:10 2015 +0100
 @@ -8,6 +8,7 @@
  #define __ARRAY__
- 
+
  #include <cstdlib>
 +#include <stdio.h>
- 
+
  #include <assert.h>
  #include <iostream>
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Collisions_And_Interactions/TETRAHEDRON_HIERARCHY.h
@@ -1008,35 +1008,35 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Collis
 @@ -96,28 +96,28 @@
  	{
  		Calculate_Bounding_Boxes (box_hierarchy);
- 
+
 -		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
 +		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
  	}
- 
+
  	void Update_Leaf_Boxes (const ARRAY<VECTOR_3D<T> >& X, const T extra_thickness = 0) // use X instead of the current particle positions
  	{
  		Calculate_Bounding_Boxes (box_hierarchy, X);
- 
+
 -		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
 +		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
  	}
- 
+
  	void Update_Leaf_Boxes (const ARRAY<VECTOR_3D<T> >& start_X, const ARRAY<VECTOR_3D<T> >& end_X, const T extra_thickness = 0) // bound tetrahedrons moving from start_X to end_X
  	{
  		Calculate_Bounding_Boxes (box_hierarchy, start_X, end_X);
- 
+
 -		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
 +		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
  	}
- 
+
  	void Update_Leaf_Boxes (const RIGID_BODY_STATE_3D<T>& start_state, const RIGID_BODY_STATE_3D<T>& end_state, const T extra_thickness = 0) // for a moving rigid body
  	{
  		Calculate_Bounding_Boxes (box_hierarchy, start_state, end_state);
- 
+
 -		if (extra_thickness) Thicken_Leaf_Boxes (extra_thickness);
 +		if (extra_thickness) this->Thicken_Leaf_Boxes (extra_thickness);
  	}
- 
+
  	void Calculate_Bounding_Boxes (ARRAY<BOX_3D<T> >& bounding_boxes)
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_3D.cpp
 --- a/pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_3D.cpp	Wed Sep 23 11:55:14 2015 +0200
@@ -1044,11 +1044,11 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deform
 @@ -105,7 +105,7 @@
  		LOG::Stop_Time();
  		Update_Collision_Penalty_Forces_And_Derivatives();
- 
+
 -		if (One_Newton_Step_Toward_Steady_State (cg_tolerance, cg_iterations, time + dt, dX_full, false, 0, iteration == 0) || use_partially_converged_result)
 +		if (this->One_Newton_Step_Toward_Steady_State (cg_tolerance, cg_iterations, time + dt, dX_full, false, 0, iteration == 0) || use_partially_converged_result)
  			if (PHYSBAM_THREADED_RUN) ARRAY_PARALLEL_OPERATIONS<VECTOR_3D<T>, T, VECTOR_3D<T> >::Add_Scaled_Array_Parallel (dX_full, (T) 1, particles.X.array, *particles.particle_ranges);
- 
+
  #ifndef NEW_SERIAL_IMPLEMENTATIOM
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.cpp
 --- a/pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.cpp	Wed Sep 23 11:55:14 2015 +0200
@@ -1056,7 +1056,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deform
 @@ -11,6 +11,11 @@
  template<class T> DEFORMABLE_OBJECT_COLLISIONS_3D<T>* DEFORMABLE_OBJECT_COLLISIONS_3D<T>::m_pointer = NULL;
  template<class T> T  DEFORMABLE_OBJECT_COLLISIONS_3D<T>::m_dt = (T) 0;
- 
+
 +
 +/* KUVAISKII: Gold linker outputs error "undefined reference to non-virtual thunk..."
 +              That has to do with the following methods, those that are inherited from COLLISION_BODY_3D
@@ -1070,7 +1070,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deform
  	NOT_IMPLEMENTED();
  }
 +*/
- 
+
  //#####################################################################
  template class DEFORMABLE_OBJECT_COLLISIONS_3D<float>;
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.h
@@ -1078,7 +1078,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Deform
 +++ b/pkgs/apps/facesim/src/Public_Library/Deformable_Objects/DEFORMABLE_OBJECT_COLLISIONS_3D.h	Tue Nov 17 17:27:10 2015 +0100
 @@ -231,21 +231,43 @@
  	}
- 
+
  //#####################################################################
 -	int Adjust_Nodes_For_Collision_Body_Collisions (const T dt);
 -	int Adjust_Nodes_For_Collision_Body_Collisions (EMBEDDED_TRIANGULATED_SURFACE<T>& embedded_triangulated_surface, TRIANGLES_OF_MATERIAL_3D<T>& triangles_of_material, const T dt);
@@ -1135,7 +1135,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Geomet
 --- a/pkgs/apps/facesim/src/Public_Library/Geometry/BOX_2D.h	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/apps/facesim/src/Public_Library/Geometry/BOX_2D.h	Tue Nov 17 17:27:10 2015 +0100
 @@ -9,6 +9,7 @@
- 
+
  #include "../Math_Tools/min.h"
  #include "../Math_Tools/max.h"
 +#include "../Math_Tools/clamp.h"
@@ -1148,11 +1148,11 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Makefi
 @@ -249,7 +249,8 @@
  # Extra flags defined by user
  CC_FLAGS += $(EXTRA_DEFS)
- 
+
 -LINK_FLAGS += -xW -lm -L$(PHYSBAM_LIBDIR) $(LDFLAGS) $(LIBS)
 +# KUVAISKII: removed xW breaking clang
 +LINK_FLAGS += -lm -L$(PHYSBAM_LIBDIR) $(LDFLAGS) $(LIBS)
- 
+
  # More type-specific flags (put quotes around strings so "debug" won't match "optdebug"
  ifneq ($(findstring "$(TYPE)","release" "optdebug" "noalamere"),)
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/DIAGONAL_MATRIX_3X3.h
@@ -1171,7 +1171,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Matric
 +++ b/pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/MATRIX_3X3.h	Tue Nov 17 17:27:10 2015 +0100
 @@ -8,17 +8,20 @@
  #define __MATRIX_3X3__
- 
+
  #include <assert.h>
 +#include <stdlib.h>
  #include "VECTOR_3D.h"
@@ -1185,7 +1185,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Matric
  #include "MATRIX_MXN.h"
  namespace PhysBAM
  {
- 
+
 +template<class T> class SYMMETRIC_MATRIX_3X3;
 +
  template<class T>
@@ -1199,12 +1199,12 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Matric
 +#include "SYMMETRIC_MATRIX_3X3.h"
 +
  #endif
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/SYMMETRIC_MATRIX_3X3.h
 --- a/pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/SYMMETRIC_MATRIX_3X3.h	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/apps/facesim/src/Public_Library/Matrices_And_Vectors/SYMMETRIC_MATRIX_3X3.h	Tue Nov 17 17:27:10 2015 +0100
 @@ -9,13 +9,15 @@
- 
+
  #include "VECTOR_3D.h"
  #include "../Read_Write/READ_WRITE_FUNCTIONS.h"
 +
@@ -1215,13 +1215,13 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Matric
 +
  namespace PhysBAM
  {
- 
+
 -template<class T> class MATRIX_3X3;
 -template<class T> class MATRIX_3X2;
 -template<class T> class DIAGONAL_MATRIX_3X3;
 -template<class T> class DIAGONAL_MATRIX_2X2;
  template<class T> class UPPER_TRIANGULAR_MATRIX_3X3;
- 
+
  template<class T>
 @@ -379,9 +381,7 @@
  }
@@ -1242,7 +1242,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Read_W
  #include <iostream>
  #include <assert.h>
 +#include <stdlib.h>
- 
+
  namespace PhysBAM
  {
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Rigid_Bodies/RIGID_BODY_LIST_3D.cpp
@@ -1261,12 +1261,12 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Solids
 --- a/pkgs/apps/facesim/src/Public_Library/Solids_And_Fluids/SOLIDS_FLUIDS_DRIVER_3D.cpp	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/apps/facesim/src/Public_Library/Solids_And_Fluids/SOLIDS_FLUIDS_DRIVER_3D.cpp	Tue Nov 17 17:27:10 2015 +0100
 @@ -47,7 +47,7 @@
- 
+
  	for (current_frame = preroll_frame; current_frame < target_frame; current_frame++)
  	{
 -		if (example.write_output_files) Write_Output_Files (current_frame);
 +		if (example.write_output_files) this->Write_Output_Files (current_frame);
- 
+
  		LOG::Push_Scope ("FRAME", "Preroll frame %d", current_frame + 1);
  		solids_evolution.Advance_To_Target_Time (Time_At_Frame (current_frame + 1), example.verbose_dt);
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Solids_And_Fluids/SOLIDS_FLUIDS_EXAMPLE.h
@@ -1279,7 +1279,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/facesim/src/Public_Library/Solids
 +#include "../Math_Tools/min.h"
  namespace PhysBAM
  {
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/avxswift-native.runconf
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
 +++ b/pkgs/apps/ferret/parsec/avxswift-native.runconf	Tue Nov 17 17:27:10 2015 +0100
@@ -1299,7 +1299,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/avxswift-native.run
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/ferret//avxswift/ferret"
++run_exec="${PROJ_ROOT}/experiments/build/ferret//avxswift/ferret"
 +
 +# Arguments to use
 +run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
@@ -1457,7 +1457,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/native-native.runco
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/ferret//native/ferret"
++run_exec="${PROJ_ROOT}/experiments/build/ferret//native/ferret"
 +
 +# Arguments to use
 +run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
@@ -1481,7 +1481,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/native_nosse-native
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/ferret//native_nosse/ferret"
++run_exec="${PROJ_ROOT}/experiments/build/ferret//native_nosse/ferret"
 +
 +# Arguments to use
 +run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
@@ -1505,7 +1505,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/swift-native.runcon
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/ferret//swift/ferret"
++run_exec="${PROJ_ROOT}/experiments/build/ferret//swift/ferret"
 +
 +# Arguments to use
 +run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
@@ -1529,7 +1529,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/ferret/parsec/swiftr-native.runco
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/ferret//swiftr/ferret"
++run_exec="${PROJ_ROOT}/experiments/build/ferret//swiftr/ferret"
 +
 +# Arguments to use
 +run_args="corel lsh queries 50 20 ${NTHREADS} output.txt"
@@ -1553,7 +1553,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/avxswift-nati
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/fluidanimate//avxswift/fluidanimate"
++run_exec="${PROJ_ROOT}/experiments/build/fluidanimate//avxswift/fluidanimate"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
@@ -1701,7 +1701,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/native-native
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/fluidanimate//native/fluidanimate"
++run_exec="${PROJ_ROOT}/experiments/build/fluidanimate//native/fluidanimate"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
@@ -1725,7 +1725,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/native_nosse-
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/fluidanimate//native_nosse/fluidanimate"
++run_exec="${PROJ_ROOT}/experiments/build/fluidanimate//native_nosse/fluidanimate"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
@@ -1749,7 +1749,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/swift-native.
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/fluidanimate//swift/fluidanimate"
++run_exec="${PROJ_ROOT}/experiments/build/fluidanimate//swift/fluidanimate"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
@@ -1773,7 +1773,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/parsec/swiftr-native
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/fluidanimate//swiftr/fluidanimate"
++run_exec="${PROJ_ROOT}/experiments/build/fluidanimate//swiftr/fluidanimate"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 500 in_500K.fluid out.fluid"
@@ -1782,16 +1782,16 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/src/fluid.hpp
 --- a/pkgs/apps/fluidanimate/src/fluid.hpp	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/apps/fluidanimate/src/fluid.hpp	Tue Nov 17 17:27:10 2015 +0100
 @@ -22,10 +22,10 @@
- 
- 
+
+
  //Enable to use double precision in program for everything except disk I/O, otherwise single precision is used
 -//#define ENABLE_DOUBLE_PRECISION
 +#define ENABLE_DOUBLE_PRECISION
- 
+
  //Our estimate for a cache line size on this machine
 -#define CACHELINE_SIZE 128
 +#define CACHELINE_SIZE 64
- 
+
  //Maximum number of particles in a physical cell
  #define PARTICLES_PER_CELL 16
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/src/parsec_barrier.hpp
@@ -1803,16 +1803,16 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/fluidanimate/src/parsec_barrier.h
  //what is going on
 -#define ENABLE_AUTOMATIC_DROPIN
 +//#define ENABLE_AUTOMATIC_DROPIN
- 
+
  //Whether to allow the use of spinning. If enabled then the barrier implementation
  //will busy-wait on a flag first. After a pre-determined amount of time has passed
  //without any success it will fall back to waiting on a condition variable. Spinning
  //will result in unsynchronized memory accesses to the flag.
 -#define ENABLE_SPIN_BARRIER
 +//#define ENABLE_SPIN_BARRIER
- 
- 
- 
+
+
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/freqmine/parsec/clang-openmp.bldconf
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
 +++ b/pkgs/apps/freqmine/parsec/clang-openmp.bldconf	Tue Nov 17 17:27:10 2015 +0100
@@ -2035,7 +2035,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/avxswift-native.
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/swaptions//avxswift/swaptions"
++run_exec="${PROJ_ROOT}/experiments/build/swaptions//avxswift/swaptions"
 +
 +# Arguments to use
 +run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
@@ -2183,7 +2183,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/native-native.ru
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/swaptions//native/swaptions"
++run_exec="${PROJ_ROOT}/experiments/build/swaptions//native/swaptions"
 +
 +# Arguments to use
 +run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
@@ -2207,7 +2207,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/native_nosse-nat
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/swaptions//native_nosse/swaptions"
++run_exec="${PROJ_ROOT}/experiments/build/swaptions//native_nosse/swaptions"
 +
 +# Arguments to use
 +run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
@@ -2231,7 +2231,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/swift-native.run
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/swaptions//swift/swaptions"
++run_exec="${PROJ_ROOT}/experiments/build/swaptions//swift/swaptions"
 +
 +# Arguments to use
 +run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
@@ -2255,7 +2255,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/swaptions/parsec/swiftr-native.ru
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/swaptions//swiftr/swaptions"
++run_exec="${PROJ_ROOT}/experiments/build/swaptions//swiftr/swaptions"
 +
 +# Arguments to use
 +run_args="-ns 128 -sm 1000000 -nt ${NTHREADS}"
@@ -2279,7 +2279,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/avxswift-native.runco
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/vips//avxswift/vips"
++run_exec="${PROJ_ROOT}/experiments/build/vips//avxswift/vips"
 +
 +# VIPS expects the number of threads in an environment variable
 +export IM_CONCURRENCY=${NTHREADS}
@@ -2433,7 +2433,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/native-native.runconf
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/vips//native/vips"
++run_exec="${PROJ_ROOT}/experiments/build/vips//native/vips"
 +
 +# VIPS expects the number of threads in an environment variable
 +export IM_CONCURRENCY=${NTHREADS}
@@ -2460,7 +2460,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/native_nosse-native.r
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/vips//native_nosse/vips"
++run_exec="${PROJ_ROOT}/experiments/build/vips//native_nosse/vips"
 +
 +# VIPS expects the number of threads in an environment variable
 +export IM_CONCURRENCY=${NTHREADS}
@@ -2487,7 +2487,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/swift-native.runconf
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/vips//swift/vips"
++run_exec="${PROJ_ROOT}/experiments/build/vips//swift/vips"
 +
 +# VIPS expects the number of threads in an environment variable
 +export IM_CONCURRENCY=${NTHREADS}
@@ -2514,7 +2514,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/vips/parsec/swiftr-native.runconf
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/vips//swiftr/vips"
++run_exec="${PROJ_ROOT}/experiments/build/vips//swiftr/vips"
 +
 +# VIPS expects the number of threads in an environment variable
 +export IM_CONCURRENCY=${NTHREADS}
@@ -2541,7 +2541,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/avxswift-native.runco
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/x264//avxswift/x264"
++run_exec="${PROJ_ROOT}/experiments/build/x264//avxswift/x264"
 +
 +# Arguments to use
 +run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
@@ -2571,7 +2571,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/clang-pthreads-nosse.
 +    i*86|x86_64)
 +	build_deps="yasm"
 +    ;;
-+    
++
 +    *)
 +	build_deps=""
 +    ;;
@@ -2615,7 +2615,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/clang-pthreads.bldcon
 +    i*86|x86_64)
 +	build_deps="yasm"
 +    ;;
-+    
++
 +    *)
 +	build_deps=""
 +    ;;
@@ -2682,7 +2682,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/gcc-pthreads-nosse.bl
 +    i*86|x86_64)
 +	build_deps="yasm"
 +    ;;
-+    
++
 +    *)
 +	build_deps=""
 +    ;;
@@ -2705,21 +2705,21 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/gcc-pthreads.bldconf
 +++ b/pkgs/apps/x264/parsec/gcc-pthreads.bldconf	Tue Nov 17 17:27:10 2015 +0100
 @@ -35,5 +35,5 @@
  build_inplace="TRUE"
- 
+
  # Arguments to pass to the configure script, if it exists
 -build_conf="--enable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
 +build_conf="--disable-asm --enable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/gcc-serial.bldconf
 --- a/pkgs/apps/x264/parsec/gcc-serial.bldconf	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/apps/x264/parsec/gcc-serial.bldconf	Tue Nov 17 17:27:10 2015 +0100
 @@ -3,5 +3,5 @@
  source ${PARSECDIR}/pkgs/apps/x264/parsec/gcc.bldconf
- 
+
  # Override configuration
 -build_conf="--disable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
 +build_conf="--disable-asm --disable-pthread --extra-asflags=\"${ASFLAGS}\" --extra-cflags=\"${CFLAGS}\" --extra-ldflags=\"${LDFLAGS} ${LIBS}\""
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/native-native.runconf
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
 +++ b/pkgs/apps/x264/parsec/native-native.runconf	Tue Nov 17 17:27:10 2015 +0100
@@ -2739,7 +2739,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/native-native.runconf
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/x264//native/x264"
++run_exec="${PROJ_ROOT}/experiments/build/x264//native/x264"
 +
 +# Arguments to use
 +run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
@@ -2763,7 +2763,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/native_nosse-native.r
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/x264//native_nosse/x264"
++run_exec="${PROJ_ROOT}/experiments/build/x264//native_nosse/x264"
 +
 +# Arguments to use
 +run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
@@ -2787,7 +2787,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/swift-native.runconf
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/x264//swift/x264"
++run_exec="${PROJ_ROOT}/experiments/build/x264//swift/x264"
 +
 +# Arguments to use
 +run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
@@ -2811,7 +2811,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/apps/x264/parsec/swiftr-native.runconf
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/x264//swiftr/x264"
++run_exec="${PROJ_ROOT}/experiments/build/x264//swiftr/x264"
 +
 +# Arguments to use
 +run_args="--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
@@ -2835,7 +2835,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/avxswift-native
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/canneal//avxswift/canneal"
++run_exec="${PROJ_ROOT}/experiments/build/canneal//avxswift/canneal"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
@@ -2982,7 +2982,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/native-native.r
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/canneal//native/canneal"
++run_exec="${PROJ_ROOT}/experiments/build/canneal//native/canneal"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
@@ -3006,7 +3006,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/native_nosse-na
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/canneal//native_nosse/canneal"
++run_exec="${PROJ_ROOT}/experiments/build/canneal//native_nosse/canneal"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
@@ -3030,7 +3030,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/swift-native.ru
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/canneal//swift/canneal"
++run_exec="${PROJ_ROOT}/experiments/build/canneal//swift/canneal"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
@@ -3054,7 +3054,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/canneal/parsec/swiftr-native.r
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/canneal//swiftr/canneal"
++run_exec="${PROJ_ROOT}/experiments/build/canneal//swiftr/canneal"
 +
 +# Arguments to use
 +run_args="${NTHREADS} 15000 2000 2500000.nets 6000"
@@ -3087,7 +3087,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/avxswift-native.r
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/dedup//avxswift/dedup"
++run_exec="${PROJ_ROOT}/experiments/build/dedup//avxswift/dedup"
 +
 +# Arguments to use
 +run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
@@ -3235,7 +3235,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/native-native.run
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/dedup//native/dedup"
++run_exec="${PROJ_ROOT}/experiments/build/dedup//native/dedup"
 +
 +# Arguments to use
 +run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
@@ -3259,7 +3259,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/native_nosse-nati
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/dedup//native_nosse/dedup"
++run_exec="${PROJ_ROOT}/experiments/build/dedup//native_nosse/dedup"
 +
 +# Arguments to use
 +run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
@@ -3283,7 +3283,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/swift-native.runc
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/dedup//swift/dedup"
++run_exec="${PROJ_ROOT}/experiments/build/dedup//swift/dedup"
 +
 +# Arguments to use
 +run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
@@ -3307,7 +3307,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/parsec/swiftr-native.run
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/dedup//swiftr/dedup"
++run_exec="${PROJ_ROOT}/experiments/build/dedup//swiftr/dedup"
 +
 +# Arguments to use
 +run_args="-c -p -v -t ${NTHREADS} -i FC-6-x86_64-disc1.iso -o output.dat.ddp"
@@ -3316,21 +3316,21 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/src/Makefile
 --- a/pkgs/kernels/dedup/src/Makefile	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/kernels/dedup/src/Makefile	Tue Nov 17 17:27:10 2015 +0100
 @@ -6,6 +6,9 @@
- 
+
  CFLAGS += -Wall -fno-strict-aliasing -D_XOPEN_SOURCE=600
- 
+
 +# Dmitrii Kuvaiskii: use no asm, otherwise clang chokes
 +CFLAGS += -DOPENSSL_NO_ASM -DOPENSSL_NO_INLINE_ASM
 +
  ostype=$(findstring solaris, ${PARSECPLAT})
- 
+
  ifeq "$(ostype)" "solaris"
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/src/mbuffer.c
 --- a/pkgs/kernels/dedup/src/mbuffer.c	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/kernels/dedup/src/mbuffer.c	Tue Nov 17 17:27:10 2015 +0100
 @@ -57,6 +57,7 @@
- 
- 
+
+
  //Initialize memory buffer subsystem
 +__attribute__ ((noinline))
  int mbuffer_system_init() {
@@ -3338,7 +3338,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/dedup/src/mbuffer.c
    int i;
 @@ -80,6 +81,7 @@
  }
- 
+
  //Shutdown memory buffer subsystem
 +__attribute__ ((noinline))
  int mbuffer_system_destroy() {
@@ -3363,7 +3363,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/avxswift-
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/streamcluster//avxswift/streamcluster"
++run_exec="${PROJ_ROOT}/experiments/build/streamcluster//avxswift/streamcluster"
 +
 +# Arguments to use
 +run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
@@ -3511,7 +3511,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/native-na
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/streamcluster//native/streamcluster"
++run_exec="${PROJ_ROOT}/experiments/build/streamcluster//native/streamcluster"
 +
 +# Arguments to use
 +run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
@@ -3535,7 +3535,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/native_no
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/streamcluster//native_nosse/streamcluster"
++run_exec="${PROJ_ROOT}/experiments/build/streamcluster//native_nosse/streamcluster"
 +
 +# Arguments to use
 +run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
@@ -3559,7 +3559,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/swift-nat
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/streamcluster//swift/streamcluster"
++run_exec="${PROJ_ROOT}/experiments/build/streamcluster//swift/streamcluster"
 +
 +# Arguments to use
 +run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
@@ -3583,7 +3583,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/parsec/swiftr-na
 +
 +
 +# Binary file to execute, relative to installation root
-+run_exec="${COMP_BENCH}/experiments/build/streamcluster//swiftr/streamcluster"
++run_exec="${PROJ_ROOT}/experiments/build/streamcluster//swiftr/streamcluster"
 +
 +# Arguments to use
 +run_args="10 20 128 1000000 200000 5000 none output.txt ${NTHREADS}"
@@ -3597,26 +3597,26 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/src/parsec_barri
  //what is going on
 -#define ENABLE_AUTOMATIC_DROPIN
 +//#define ENABLE_AUTOMATIC_DROPIN
- 
+
  //Whether to allow the use of spinning. If enabled then the barrier implementation
  //will busy-wait on a flag first. After a pre-determined amount of time has passed
  //without any success it will fall back to waiting on a condition variable. Spinning
  //will result in unsynchronized memory accesses to the flag.
 -#define ENABLE_SPIN_BARRIER
 +//#define ENABLE_SPIN_BARRIER
- 
- 
- 
+
+
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/kernels/streamcluster/src/streamcluster.cpp
 --- a/pkgs/kernels/streamcluster/src/streamcluster.cpp	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/kernels/streamcluster/src/streamcluster.cpp	Tue Nov 17 17:27:10 2015 +0100
 @@ -49,7 +49,7 @@
  /* higher ITER also scales the running time almost linearly */
  #define ITER 3 // iterate ITER* k log k times; ITER >= 1
- 
+
 -#define CACHE_LINE 32 // cache line in byte
 +#define CACHE_LINE 64 // cache line in byte
- 
+
  /* this structure represents a point */
  /* these will be passed around to avoid copying coordinates */
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/glib/parsec/clang-pthreads-nosse.bldconf
@@ -3993,7 +3993,7 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/mesa/src/src/mesa/x86-64/xform4.S
  	movl V4F_COUNT(%rdx), %ecx	/* count */
 -	movzx V4F_STRIDE(%rdx), %eax	/* stride */
 +	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
- 
+
  	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
  	movl $4, V4F_SIZE(%rdi)		/* set dest size */
 @@ -101,7 +101,7 @@
@@ -4002,61 +4002,61 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/mesa/src/src/mesa/x86-64/xform4.S
  .byte  0x00, 0x00, 0x00, 0x00
 -.float 0f+1.0
 +.float 1.0
- 
+
  .text
  .align 16
 @@ -120,7 +120,7 @@
  	movaps 16(%rax), %xmm10
- 
+
  	movl V4F_COUNT(%rdx), %ecx	/* count */
 -	movzx V4F_STRIDE(%rdx), %eax	/* stride */
 +	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
- 
+
  	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
  	movl $4, V4F_SIZE(%rdi)		/* set dest size */
 @@ -180,7 +180,7 @@
  _mesa_x86_64_transform_points4_identity:
- 
+
  	movl V4F_COUNT(%rdx), %ecx	/* count */
 -	movzx V4F_STRIDE(%rdx), %eax	/* stride */
 +	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
- 
+
  	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
  	movl $4, V4F_SIZE(%rdi)		/* set dest size */
 @@ -208,7 +208,7 @@
  _mesa_x86_64_transform_points4_3d_no_rot:
- 
+
  	movl V4F_COUNT(%rdx), %ecx	/* count */
 -	movzx V4F_STRIDE(%rdx), %eax	/* stride */
 +	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
- 
+
  	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
  	movl $4, V4F_SIZE(%rdi)		/* set dest size */
 @@ -272,7 +272,7 @@
  _mesa_x86_64_transform_points4_perspective:
- 
+
  	movl V4F_COUNT(%rdx), %ecx	/* count */
 -	movzx V4F_STRIDE(%rdx), %eax	/* stride */
 +	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
- 
+
  	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
  	movl $4, V4F_SIZE(%rdi)		/* set dest size */
 @@ -338,7 +338,7 @@
  _mesa_x86_64_transform_points4_2d_no_rot:
- 
+
  	movl V4F_COUNT(%rdx), %ecx	/* count */
 -	movzx V4F_STRIDE(%rdx), %eax	/* stride */
 +	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
- 
+
  	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
  	movl $4, V4F_SIZE(%rdi)		/* set dest size */
 @@ -393,7 +393,7 @@
  _mesa_x86_64_transform_points4_2d:
- 
+
  	movl V4F_COUNT(%rdx), %ecx	/* count */
 -	movzx V4F_STRIDE(%rdx), %eax	/* stride */
 +	movzbl V4F_STRIDE(%rdx), %eax	/* stride */
- 
+
  	movl %ecx, V4F_COUNT(%rdi)	/* set dest count */
  	movl $4, V4F_SIZE(%rdi)		/* set dest size */
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/parsec/clang-pthreads-nosse.bldconf
@@ -4135,272 +4135,272 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/apps/smime.pod
 --- a/pkgs/libs/ssl/src/doc/apps/smime.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/apps/smime.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -265,28 +265,28 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  the operation was completely successfully.
- 
--=item 1 
-+=item C<1> 
- 
+
+-=item 1
++=item C<1>
+
  an error occurred parsing the command options.
- 
+
 -=item 2
 +=item C<2>
- 
+
  one of the input files could not be read.
- 
+
 -=item 3
 +=item C<3>
- 
+
  an error occurred creating the PKCS#7 file or when reading the MIME
  message.
- 
+
 -=item 4
 +=item C<4>
- 
+
  an error occurred decrypting or verifying the message.
- 
+
 -=item 5
 +=item C<5>
- 
+
  the message was verified correctly but an error occurred writing out
  the signers certificates.
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/crypto/rand.pod
 --- a/pkgs/libs/ssl/src/doc/crypto/rand.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/crypto/rand.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -74,16 +74,16 @@
- 
+
  =over 4
- 
+
 -=item 1
 +=item C<1>
- 
+
  A good hashing algorithm to mix things up and to convert the RNG 'state'
  to random numbers.
- 
+
 -=item 2
 +=item C<2>
- 
+
  An initial source of random 'state'.
- 
+
 -=item 3
 +=item C<3>
- 
+
  The state should be very large.  If the RNG is being used to generate
  4096 bit RSA keys, 2 2048 bit random strings are required (at a minimum).
 @@ -93,13 +93,13 @@
  a bad idea to keep quite a lot of RNG state.  It should be easier to
  break a cipher than guess the RNG seed data.
- 
+
 -=item 4
 +=item C<4>
- 
+
  Any RNG seed data should influence all subsequent random numbers
  generated.  This implies that any random seed data entered will have
  an influence on all subsequent random numbers generated.
- 
+
 -=item 5
 +=item C<5>
- 
+
  When using data to seed the RNG state, the data used should not be
  extractable from the RNG state.  I believe this should be a
 @@ -108,12 +108,12 @@
  not be disclosed by either subsequent random numbers or a
  'core' dump left by a program crash.
- 
+
 -=item 6
 +=item C<6>
- 
+
  Given the same initial 'state', 2 systems should deviate in their RNG state
  (and hence the random numbers generated) over time if at all possible.
- 
+
 -=item 7
 +=item C<7>
- 
+
  Given the random number output stream, it should not be possible to determine
  the RNG state or the next random number.
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_COMP_add_compression_method.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_COMP_add_compression_method.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_COMP_add_compression_method.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -53,11 +53,11 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  The operation succeeded.
- 
+
 -=item 1
 +=item C<1>
- 
+
  The operation failed. Check the error queue to find out the reason.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_add_session.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_add_session.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_add_session.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -52,13 +52,13 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
   The operation failed. In case of the add operation, it was tried to add
   the same (identical) session twice. In case of the remove operation, the
   session was not found in the cache.
- 
+
 -=item 1
 +=item C<1>
-  
+
   The operation succeeded.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_load_verify_locations.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_load_verify_locations.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_load_verify_locations.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -100,13 +100,13 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  The operation failed because B<CAfile> and B<CApath> are NULL or the
  processing at one of the locations specified failed. Check the error
  stack to find out the reason.
- 
+
 -=item 1
 +=item C<1>
- 
+
  The operation succeeded.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_client_CA_list.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_client_CA_list.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_client_CA_list.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -66,11 +66,11 @@
- 
+
  =over 4
- 
+
 -=item 1
 +=item C<1>
- 
+
  The operation succeeded.
- 
+
 -=item 0
 +=item C<0>
- 
+
  A failure while manipulating the STACK_OF(X509_NAME) object occurred or
  the X509_NAME could not be extracted from B<cacert>. Check the error stack
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_session_id_context.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_session_id_context.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_session_id_context.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -64,13 +64,13 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  The length B<sid_ctx_len> of the session id context B<sid_ctx> exceeded
  the maximum allowed length of B<SSL_MAX_SSL_SESSION_ID_LENGTH>. The error
  is logged to the error stack.
- 
+
 -=item 1
 +=item C<1>
- 
+
  The operation succeeded.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_ssl_version.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_ssl_version.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_CTX_set_ssl_version.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -42,11 +42,11 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  The new choice failed, check the error stack to find out the reason.
- 
+
 -=item 1
 +=item C<1>
- 
+
  The operation succeeded.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_accept.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_accept.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_accept.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -44,12 +44,12 @@
- 
+
  =over 4
- 
+
 -=item 1
 +=item C<1>
- 
+
  The TLS/SSL handshake was successfully completed, a TLS/SSL connection has been
  established.
- 
+
 -=item 0
 +=item C<0>
- 
+
  The TLS/SSL handshake was not successful but was shut down controlled and
  by the specifications of the TLS/SSL protocol. Call SSL_get_error() with the
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_clear.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_clear.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_clear.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -50,12 +50,12 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  The SSL_clear() operation could not be performed. Check the error stack to
  find out the reason.
- 
+
 -=item 1
 +=item C<1>
- 
+
  The SSL_clear() operation was successful.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_connect.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_connect.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_connect.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -41,12 +41,12 @@
- 
+
  =over 4
- 
+
 -=item 1
 +=item C<1>
- 
+
  The TLS/SSL handshake was successfully completed, a TLS/SSL connection has been
  established.
- 
+
 -=item 0
 +=item C<0>
- 
+
  The TLS/SSL handshake was not successful but was shut down controlled and
  by the specifications of the TLS/SSL protocol. Call SSL_get_error() with the
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_do_handshake.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_do_handshake.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_do_handshake.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -45,12 +45,12 @@
- 
+
  =over 4
- 
+
 -=item 1
 +=item C<1>
- 
+
  The TLS/SSL handshake was successfully completed, a TLS/SSL connection has been
  established.
- 
+
 -=item 0
 +=item C<0>
- 
+
  The TLS/SSL handshake was not successful but was shut down controlled and
  by the specifications of the TLS/SSL protocol. Call SSL_get_error() with the
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_read.pod
@@ -4409,91 +4409,91 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_read.pod
 @@ -86,7 +86,7 @@
  The read operation was successful; the return value is the number of
  bytes actually read from the TLS/SSL connection.
- 
+
 -=item 0
 +=item C<0>
- 
+
  The read operation was not successful. The reason may either be a clean
  shutdown due to a "close notify" alert sent by the peer (in which case
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_session_reused.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_session_reused.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_session_reused.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -27,11 +27,11 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  A new session was negotiated.
- 
+
 -=item 1
 +=item C<1>
- 
+
  A session was reused.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_set_fd.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_set_fd.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_set_fd.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -35,11 +35,11 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  The operation failed. Check the error stack to find out why.
- 
+
 -=item 1
 +=item C<1>
- 
+
  The operation succeeded.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_set_session.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_set_session.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_set_session.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -37,11 +37,11 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  The operation failed; check the error stack to find out the reason.
- 
+
 -=item 1
 +=item C<1>
- 
+
  The operation succeeded.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_set_shutdown.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_set_shutdown.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_set_shutdown.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -24,7 +24,7 @@
- 
+
  =over 4
- 
+
 -=item 0
 +=item C<0>
- 
+
  No shutdown setting, yet.
- 
+
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_shutdown.pod
 --- a/pkgs/libs/ssl/src/doc/ssl/SSL_shutdown.pod	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/libs/ssl/src/doc/ssl/SSL_shutdown.pod	Tue Nov 17 17:27:10 2015 +0100
 @@ -92,12 +92,12 @@
- 
+
  =over 4
- 
+
 -=item 1
 +=item C<1>
- 
+
  The shutdown was successfully completed. The "close notify" alert was sent
  and the peer's "close notify" alert was received.
- 
+
 -=item 0
 +=item C<0>
- 
+
  The shutdown is not yet finished. Call SSL_shutdown() for a second time,
  if a bidirectional shutdown shall be performed.
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_write.pod
@@ -4502,10 +4502,10 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/ssl/src/doc/ssl/SSL_write.pod
 @@ -79,7 +79,7 @@
  The write operation was successful, the return value is the number of
  bytes actually written to the TLS/SSL connection.
- 
+
 -=item 0
 +=item C<0>
- 
+
  The write operation was not successful. Probably the underlying connection
  was closed. Call SSL_get_error() with the return value B<ret> to find out,
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/libs/zlib/parsec/clang-pthreads-nosse.bldconf
@@ -4655,9 +4655,9 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/cmake/src/Utilities/cmcurl/streq
 --- a/pkgs/tools/cmake/src/Utilities/cmcurl/strequal.c	Wed Sep 23 11:55:14 2015 +0200
 +++ b/pkgs/tools/cmake/src/Utilities/cmcurl/strequal.c	Tue Nov 17 17:27:10 2015 +0100
 @@ -23,6 +23,7 @@
- 
+
  #include "setup.h"
- 
+
 +#include <bsd/string.h>
  #include <string.h>
  #include <ctype.h>
@@ -4667,10 +4667,10 @@ diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/cmake/src/Utilities/cmcurl/streq
 +++ b/pkgs/tools/cmake/src/Utilities/cmcurl/strequal.h	Tue Nov 17 17:27:10 2015 +0100
 @@ -24,6 +24,7 @@
   ***************************************************************************/
- 
+
  #include <curl/curl.h>
 +#include <bsd/string.h>
- 
+
  #define strequal(a,b) curl_strequal(a,b)
  #define strnequal(a,b,c) curl_strnequal(a,b,c)
 diff -r 68245cfd6d02 -r 7ef72605fc49 pkgs/tools/libtool/parsec/gcc-pthreads-nosse.bldconf

@@ -3,10 +3,9 @@ SRC := CumNormalInv MaxFunction RanUnif icdf HJM_SimPath_Forward_Blocking HJM HJ
 
 VPATH := src
 
-CCOMFLAGS += -fstrict-aliasing -fkeep-inline-functions
+CCFLAGS += -fstrict-aliasing -fkeep-inline-functions
 
-include common.mk
-include $(ACTION_MAKEFILE)
+include Makefile.$(BUILD_TYPE)
 include ../parsec_common.mk
 
 

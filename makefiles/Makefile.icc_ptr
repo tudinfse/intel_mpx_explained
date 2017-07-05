@@ -1,0 +1,3 @@
+include Makefile.icc_native
+
+CCFLAGS += -check-pointers=rw

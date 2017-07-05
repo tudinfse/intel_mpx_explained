@@ -1,0 +1,4 @@
+include Makefile.safecode_native
+
+CCFLAGS += -fmemsafety -g -fmemsafety-terminate -stack-protector=1
+LIB_DIRS += $(GOLD_PATH)/lib

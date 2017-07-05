@@ -1,0 +1,6 @@
+include Makefile.icc_native
+
+UTILS := $(PROJ_ROOT)/src/util/icc_wrappers/__intel_new_feature_proc_init.c $(UTILS)
+CCFLAGS += -check-pointers-mpx=rw
+LIBS    += -lmpx
+

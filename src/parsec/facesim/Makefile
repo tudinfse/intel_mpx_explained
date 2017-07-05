@@ -4,21 +4,20 @@ SRC := main FACE_DRIVER FACE_LANDMARK_OPTIMIZATION_GOAL FACE_OPTIMIZATION LANDMA
 VPATH := src
 
 CXXFLAGS += -fexceptions
-INC_DIR += $(COMP_BENCH)/src/parsec/facesim/src/
-INC_DIR += $(COMP_BENCH)/src/parsec/facesim/src/TaskQ/include
+INC_DIR += $(PROJ_ROOT)/src/parsec/facesim/src/ \
+ 		   $(PROJ_ROOT)/src/parsec/facesim/src/TaskQ/include
 
-LIB_DIRS += $(COMP_BENCH)/src/parsec/facesim/src/lib/
+LIB_DIRS += $(PROJ_ROOT)/src/parsec/facesim/src/lib/
 LIBS += -lPhysBAM
 
 
 ifneq ($(strip $(NUM_THREADS)),1)
-	CCOMFLAGS += -DENABLE_PTHREADS
+	CCFLAGS += -DENABLE_PTHREADS
 else
-	CCOMFLAGS += -DNEW_SERIAL_IMPLEMENTATIOM
+	CCFLAGS += -DNEW_SERIAL_IMPLEMENTATIOM
 endif
 
-include common.mk
-include $(ACTION_MAKEFILE)
+include Makefile.$(BUILD_TYPE)
 include ../parsec_common.mk
 
 ifeq ($(CC),icc)

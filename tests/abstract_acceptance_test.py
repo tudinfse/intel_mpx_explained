@@ -11,9 +11,9 @@ from .abstract_test import BuildAndRun, current_action, current_benchmarks
 set_all_environments()
 os.environ['NUM_THREADS'] = '1'
 
-COMP_BENCH = os.environ.get("COMP_BENCH")
-CONF_DIR = "%s/experiments/makefiles" % COMP_BENCH
-BUILD_DIR = "%s/experiments/build" % COMP_BENCH
+PROJ_ROOT = os.environ.get("PROJ_ROOT")
+CONF_DIR = "%s/experiments/makefiles" % PROJ_ROOT
+BUILD_DIR = "%s/experiments/build" % PROJ_ROOT
 DATA_PATH = os.environ.get("DATA_PATH")
 INPUT_PATH = DATA_PATH + "/inputs/"
 

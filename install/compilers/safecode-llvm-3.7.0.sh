@@ -2,7 +2,7 @@
 
 apt-get install -y subversion
 set -e
-source ${COMP_BENCH}/install/common.sh
+source ${PROJ_ROOT}/install/common.sh
 
 # check Gold linker
 if [ ! -d "${BIN_PATH}/binutils_gold/build" ]; then

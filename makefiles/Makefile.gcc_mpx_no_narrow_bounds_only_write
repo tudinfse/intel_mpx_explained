@@ -1,0 +1,3 @@
+include Makefile.gcc_mpx
+
+CCFLAGS += -fno-chkp-narrow-bounds -fno-chkp-check-read

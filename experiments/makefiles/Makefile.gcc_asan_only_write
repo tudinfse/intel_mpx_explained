@@ -1,4 +1,0 @@
-include Makefile.gcc_native
-
-CCOMFLAGS += -fsanitize=address --param asan-instrument-reads=0
-LDFLAGS += -fsanitize=address --param asan-instrument-reads=0

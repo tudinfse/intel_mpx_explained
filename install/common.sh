@@ -69,3 +69,17 @@ function download_github_and_link {
 
     cd -
 }
+
+function install_dependency {
+    local name=$1
+    local path=$2
+
+    while true; do
+        read -p "Do you wish to install $1 [Yn]?" yn
+        case $yn in
+            [Yy]* ) eval "$2"; break;;
+            [Nn]* ) echo "Skip"; break;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+}

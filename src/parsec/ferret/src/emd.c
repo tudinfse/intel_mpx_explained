@@ -16,7 +16,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  *    An implementation of the Earth Movers Distance.
  *    Based of the solution for the Transportation problem as described in
- *    "Introduction to Mathematical Programming" by F. S. Hillier and 
+ *    "Introduction to Mathematical Programming" by F. S. Hillier and
  *    G. J. Lieberman, McGraw-Hill, 1990.
  *
  *    Copyright (C) 1998 Yossi Rubner
@@ -82,21 +82,21 @@ freeemdstate(emd_state_t *state)
 /******************************************************************************
 float emd(signature_t *Signature1, signature_t *Signature2,
 	  float (*Dist)(feature_t *, feature_t *), flow_t *Flow, int *FlowSize)
-  
+
 where
 
    Signature1, Signature2  Pointers to signatures that their distance we want
               to compute.
    Dist       Pointer to the ground distance. i.e. the function that computes
               the distance between two features.
-   Flow       (Optional) Pointer to a vector of flow_t (defined in emd.h) 
+   Flow       (Optional) Pointer to a vector of flow_t (defined in emd.h)
               where the resulting flow will be stored. Flow must have n1+n2-1
               elements, where n1 and n2 are the sizes of the two signatures
               respectively.
               If NULL, the flow is not returned.
    FlowSize   (Optional) Pointer to an integer where the number of elements in
               Flow will be stored
-              
+
 ******************************************************************************/
 static __thread double **C = NULL;
 
@@ -128,21 +128,21 @@ emd(signature_t *Signature1, signature_t *Signature2, float (*Dist)(cass_size_t,
   print("\nINITIAL SOLUTION:\n");
   printSolution(state);
 #endif
- 
+
   if (state->n1 > 1 && state->n2 > 1)  /* IF _n1 = 1 OR _n2 = 1 THEN WE ARE DONE */
     {
       for (itr = 1; itr < MAX_ITERATIONS; itr++)
 	{
 	  /* FIND BASIC VARIABLES */
 	  findBasicVariables(state, U, V);
-	  
+
 	  /* CHECK FOR OPTIMALITY */
 	  if (isOptimal(state, U, V))
 	    break;
-	  
+
 	  /* IMPROVE SOLUTION */
 	  newSol(state);
-	  
+
 #if DEBUG_LEVEL > 1
 	  print("\nITERATION # %d \n", itr);
 	  printSolution(state);
@@ -163,7 +163,7 @@ emd(signature_t *Signature1, signature_t *Signature2, float (*Dist)(cass_size_t,
 	continue;
       if (XP->i == Signature1->n || XP->j == Signature2->n)  /* DUMMY FEATURE */
 	continue;
-      
+
       if (XP->val == 0)  /* ZERO FLOW */
 	continue;
 
@@ -198,7 +198,7 @@ emdinit(emd_state_t *state, signature_t *Signature1, signature_t *Signature2, fl
   int i, j;
   double sSum, dSum, diff;
   double S[MAX_SIG_SIZE1], D[MAX_SIG_SIZE1];
- 
+
   state->n1 = Signature1->n;
   state->n2 = Signature2->n;
 
@@ -207,17 +207,17 @@ emdinit(emd_state_t *state, signature_t *Signature1, signature_t *Signature2, fl
       warn("emd: Signature size is limited to %d, n1: %d, n2: %d\n", MAX_SIG_SIZE, state->n1, state->n2);
       return EMD_INFINITY;
     }
-  
+
   /* COMPUTE THE DISTANCE MATRIX */
   state->maxC = 0;
   for(i=0; i < state->n1; i++)
-    for(j=0; j < state->n2; j++) 
+    for(j=0; j < state->n2; j++)
       {
 	state->C[i][j] = Dist(dim, Signature1->Features[i], Signature2->Features[j], param);
 	if (state->C[i][j] > state->maxC)
 	  state->maxC = state->C[i][j];
       }
-	
+
   /* SUM UP THE SUPPLY AND DEMAND */
   sSum = 0.0;
   for(i=0; i < state->n1; i++)
@@ -261,7 +261,7 @@ emdinit(emd_state_t *state, signature_t *Signature1, signature_t *Signature2, fl
     for (j=0; j < state->n2; j++)
 	state->IsX[i][j] = 0;
   state->EndX = state->X;
-   
+
   state->maxW = sSum > dSum ? sSum : dSum;
 
   /* FIND INITIAL SOLUTION */
@@ -333,7 +333,7 @@ findBasicVariables(emd_state_t *state, emd_node1_t *U, emd_node1_t *V)
 	print("[%d]",CurV-V);
       print("\n\n");
 #endif
-      
+
       found = 0;
       if (VfoundNum < state->n2)
 	{
@@ -407,11 +407,11 @@ findBasicVariables(emd_state_t *state, emd_node1_t *U, emd_node1_t *V)
 
 static int
 isOptimal(emd_state_t *state, emd_node1_t *U, emd_node1_t *V)
-{    
+{
   double delta, deltaMin;
   int i, j, minI, minJ;
 
-  minI = minJ = 0;	/* XXX: used but not set */ 
+  minI = minJ = 0;	/* XXX: used but not set */
 
   /* FIND THE MINIMAL Cij-Ui-Vj OVER ALL i,j */
   deltaMin = EMD_INFINITY;
@@ -437,10 +437,10 @@ isOptimal(emd_state_t *state, emd_node1_t *U, emd_node1_t *V)
        warn("emd: Unexpected error in isOptimal.\n");
        fatal("emd: error in isOptimal");
      }
-   
+
    state->EnterX->i = minI;
    state->EnterX->j = minJ;
-   
+
    /* IF NO NEGATIVE deltaMin, WE FOUND THE OPTIMAL SOLUTION */
    return deltaMin >= -EPSILON * state->maxC;
 
@@ -458,7 +458,7 @@ newSol(emd_state_t *state)
     emd_node2_t *Loop[2*MAX_SIG_SIZE1], *CurX, *LeaveX;
 
     LeaveX = NULL;	/* XXX: used but not set */
- 
+
 #if DEBUG_LEVEL > 3
     print("EnterX = (%d,%d)\n", state->EnterX->i, state->EnterX->j);
 #endif
@@ -530,8 +530,8 @@ findLoop(emd_state_t *state, emd_node2_t **Loop)
 {
   int i, steps;
   emd_node2_t **CurX, *NewX;
-  char IsUsed[2*MAX_SIG_SIZE1]; 
- 
+  char IsUsed[2*MAX_SIG_SIZE1];
+
   for (i=0; i < state->n1+state->n2; i++)
     IsUsed[i] = 0;
 
@@ -566,7 +566,7 @@ findLoop(emd_state_t *state, emd_node2_t **Loop)
 	 IsUsed[NewX-state->X] = 1;
 	 steps++;
 #if DEBUG_LEVEL > 3
-	 print("steps=%d, NewX=(%d,%d)\n", steps, NewX->i, NewX->j);    
+	 print("steps=%d, NewX=(%d,%d)\n", steps, NewX->i, NewX->j);
 #endif
        }
      else  /* DIDN'T FIND THE NEXT X */
@@ -575,14 +575,14 @@ findLoop(emd_state_t *state, emd_node2_t **Loop)
 	 do
 	   {
 	     NewX = *CurX;
-	     do 
+	     do
 	       {
 		 if (steps%2 == 1)
 		   NewX = NewX->NextR;
 		 else
 		   NewX = NewX->NextC;
 	       } while (NewX != NULL && IsUsed[NewX-state->X]);
-	     
+
 	     if (NewX == NULL)
 	       {
 		 IsUsed[*CurX-state->X] = 0;
@@ -590,17 +590,17 @@ findLoop(emd_state_t *state, emd_node2_t **Loop)
 		 steps--;
 	       }
 	 } while (NewX == NULL && CurX >= Loop);
-	 
+
 #if DEBUG_LEVEL > 3
 	 print("BACKTRACKING TO: steps=%d, NewX=(%d,%d)\n",
-		steps, NewX->i, NewX->j);    
+		steps, NewX->i, NewX->j);
 #endif
            IsUsed[*CurX-state->X] = 0;
 	   *CurX = NewX;
 	   IsUsed[NewX-state->X] = 1;
-       }     
+       }
     } while(CurX >= Loop);
-  
+
   if (CurX == Loop)
     {
       warn("emd: Unexpected error in findLoop!\n");
@@ -641,7 +641,7 @@ russel(emd_state_t *state, double *S, double *D)
       CurU++;
     }
   (--CurU)->Next = NULL;
-  
+
   vHead.Next = CurV = Vr;
   for (j=0; j < state->n2; j++)
     {
@@ -651,7 +651,7 @@ russel(emd_state_t *state, double *S, double *D)
       CurV++;
     }
   (--CurV)->Next = NULL;
-  
+
   /* FIND THE MAXIMUM ROW AND COLUMN VALUES (Ur[i] AND Vr[j]) */
   for(i=0; i < state->n1 ; i++)
     for(j=0; j < state->n2 ; j++)
@@ -663,7 +663,7 @@ russel(emd_state_t *state, double *S, double *D)
 	if (Vr[j].val <= v)
 	  Vr[j].val = v;
       }
-  
+
   /* COMPUTE THE Delta MATRIX */
   for(i=0; i < state->n1 ; i++)
     for(j=0; j < state->n2 ; j++)
@@ -683,12 +683,12 @@ russel(emd_state_t *state, double *S, double *D)
       print("\n");
       print("\n\n");
 #endif
- 
+
       /* FIND THE SMALLEST Delta[i][j] */
-      found = 0; 
+      found = 0;
       minI = uHead.Next ? uHead.Next->i : 0;	/* XXX: used but not set */
       minJ = vHead.Next ? vHead.Next->i : 0;	/* XXX: used but not set */
-      deltaMin = EMD_INFINITY;      
+      deltaMin = EMD_INFINITY;
       PrevU = &uHead;
       for (CurU=uHead.Next; CurU != NULL; CurU=CurU->Next)
 	{
@@ -712,7 +712,7 @@ russel(emd_state_t *state, double *S, double *D)
 	    }
 	  PrevU = CurU;
 	}
-      
+
       if (! found)
 	break;
 
@@ -739,7 +739,7 @@ russel(emd_state_t *state, double *S, double *D)
 		      if (CurV->val <= state->C[i][j])
 			CurV->val = state->C[i][j];
 		    }
-		  
+
 		  /* IF NEEDED, ADJUST THE RELEVANT Delta[*][j] */
 		  diff = oldVal - CurV->val;
 		  if (fabs(diff) < EPSILON * state->maxC)
@@ -766,7 +766,7 @@ russel(emd_state_t *state, double *S, double *D)
 		      if(CurU->val <= state->C[i][j])
 			CurU->val = state->C[i][j];
 		    }
-		  
+
 		  /* If NEEDED, ADJUST THE RELEVANT Delta[i][*] */
 		  diff = oldVal - CurU->val;
 		  if (fabs(diff) < EPSILON * state->maxC)
@@ -782,28 +782,28 @@ static void
 addBasicVariable(emd_state_t *state, int minI, int minJ, double *S, double *D, emd_node1_t *PrevUMinI, emd_node1_t *PrevVMinJ, emd_node1_t *UHead)
 {
   double T;
-  
+
   if (fabs(S[minI]-D[minJ]) <= EPSILON * state->maxW)  /* DEGENERATE CASE */
     {
       T = S[minI];
       S[minI] = 0;
-      D[minJ] -= T; 
+      D[minJ] -= T;
     }
   else if (S[minI] < D[minJ])  /* SUPPLY EXHAUSTED */
     {
       T = S[minI];
       S[minI] = 0;
-      D[minJ] -= T; 
+      D[minJ] -= T;
     }
   else  /* DEMAND EXHAUSTED */
     {
       T = D[minJ];
-      D[minJ] = 0; 
-      S[minI] -= T; 
+      D[minJ] = 0;
+      S[minI] -= T;
     }
 
   /* X(minI,minJ) IS A BASIC VARIABLE */
-  state->IsX[minI][minJ] = 1; 
+  state->IsX[minI][minJ] = 1;
 
   state->EndX->val = T;
   state->EndX->i = minI;

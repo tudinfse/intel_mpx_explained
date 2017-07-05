@@ -16,19 +16,22 @@ FNULL = open(devnull, 'w')
 def build_libc(t, conf_path):
     logging.debug(BUILD_MSG % ('libc', t))
     if not env.get("EXP_NO_BUILD"):
-        c("make ACTION=" + t + " -I " + conf_path + " -C " + "libc")
+        c("make BUILD_TYPE=" + t + " -I " + conf_path + " -C " + "libc")
 
 
 def build_benchmark(b, t, makefile, build_path):
     logging.debug(BUILD_MSG % (b, t))
-    common_makefiles = env["COMP_BENCH"] + "/experiments/makefiles"
+    common_makefiles = env["PROJ_ROOT"] + "/makefiles"
 
     if not env.get("EXP_NO_BUILD"):
         quiet = '-s' if not VERBOSE else ''
         threads = env["BUILD_THREADS"]
 
         try:
-            c("make -j{0} ACTION={1} -I {2} -C {3} {4}".format(threads, t, common_makefiles, makefile, quiet))
+            build_cmd = "make -j{0} BUILD_TYPE={1} -I {2} -C {3} {4}".format(threads, t, common_makefiles, makefile, quiet)
+            if VERBOSE:
+                logging.debug("Build command: " + build_cmd)
+            c(build_cmd)
         except CalledProcessError as e:
             logging.error("Could not build the benchmark (exit code = %d). See the error message below." % e.returncode)
             logging.debug(e.output)

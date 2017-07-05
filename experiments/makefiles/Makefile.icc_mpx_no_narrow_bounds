@@ -1,3 +1,0 @@
-include Makefile.icc_mpx
-
-CCOMFLAGS += -no-check-pointers-narrowing

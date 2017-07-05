@@ -5,12 +5,11 @@ SRC := ferret-serial arena assign bench bitmap cass cass_dist cass_reg cuckoo_ha
 
 VPATH := src
 
-INC_DIR += $(COMP_BENCH)/src/parsec/ferret/src/include
-CFLAGS += -Wno-int-conversion -Wno-incompatible-pointer-types -Wno-implicit-function-declaration -Wno-int-to-pointer-cast
-CXXFLAGS += -Wno-int-conversion -Wno-incompatible-pointer-types -Wno-implicit-function-declaration -Wno-int-to-pointer-cast
+INC_DIR += $(PROJ_ROOT)/src/parsec/ferret/src/include
+CCFLAGS += -Wno-int-conversion -Wno-incompatible-pointer-types -Wno-implicit-function-declaration -Wno-int-to-pointer-cast
 
-LIB_DIRS += $(COMP_BENCH)/experiments/build/parsec_libs/gsl/$(ACTION)/lib
-LIB_DIRS += $(COMP_BENCH)/experiments/build/parsec_libs/libjpeg/$(ACTION)/lib
+LIB_DIRS += $(PROJ_ROOT)/build/libs/gsl/$(BUILD_TYPE)/lib \
+			$(PROJ_ROOT)/build/libs/libjpeg/$(BUILD_TYPE)/lib
 LIBS += -lrt -lm -lgsl -lgslcblas -ljpeg
 
 ifneq ($(strip $(NUM_THREADS)),1)
@@ -18,8 +17,7 @@ ifneq ($(strip $(NUM_THREADS)),1)
     SRC += ferret-pthreads tpool queue
 endif
 
-include common.mk
-include $(ACTION_MAKEFILE)
+include Makefile.$(BUILD_TYPE)
 include ../parsec_common.mk
 
 .PHONY: buildlibs
@@ -28,9 +26,9 @@ all:
 	@${MAKE} buildlibs
 	@${MAKE} $(BUILD_PATH)/$(NAME)
 
-buildlibs: export BENCH_SUITE=parsec_libs
+buildlibs: export BENCH_SUITE=libs
 
 buildlibs:
-	$(MAKE) ACTION=$(ACTION) -I $(COMP_BENCH)/experiments/makefiles -C $(COMP_BENCH)/src/$(BENCH_SUITE)/gsl
-	$(MAKE) ACTION=$(ACTION) -I $(COMP_BENCH)/experiments/makefiles -C $(COMP_BENCH)/src/$(BENCH_SUITE)/libjpeg
+	$(MAKE) BUILD_TYPE=$(BUILD_TYPE) -I $(PROJ_ROOT)/makefiles -C $(PROJ_ROOT)/src/$(BENCH_SUITE)/gsl
+	$(MAKE) BUILD_TYPE=$(BUILD_TYPE) -I $(PROJ_ROOT)/makefiles -C $(PROJ_ROOT)/src/$(BENCH_SUITE)/libjpeg
 

@@ -1,0 +1,6 @@
+include Makefile.gcc_native
+
+#UTILS := $(PROJ_ROOT)/src/util/icc_wrappers/__intel_new_feature_proc_init.c $(UTILS)
+CCFLAGS +=  -fcheck-pointer-bounds -mmpx
+LIBS += -lmpx -lmpxwrappers
+

@@ -1,7 +1,6 @@
-include common.mk
-BUILD_PATH = $(COMP_BENCH)/experiments/build/$(BENCH_SUITE)/vips/$(ACTION)/$(NAME)
-include $(ACTION_MAKEFILE)
-include $(COMP_BENCH)/src/parsec/parsec_common.mk
+BUILD_PATH = $(BUILD_ROOT)/$(BENCH_SUITE)/vips/$(BUILD_TYPE)/$(NAME)
+include Makefile.$(BUILD_TYPE)
+include $(PROJ_ROOT)/src/parsec/parsec_common.mk
 
 all: $(BUILD_PATH)/../$(NAME).$(OBJ_EXT)
 

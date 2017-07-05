@@ -1,3 +1,0 @@
-include gcc_constants.mk
-include common_targets.mk
-

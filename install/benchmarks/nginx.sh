@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-source ${COMP_BENCH}/install/common.sh
+source ${PROJ_ROOT}/install/common.sh
 apt-get install -y libssl-dev libtext-lorem-perl apache2-utils
 
 # nginx requires X permission for all users on the path: http://stackoverflow.com/questions/6795350/nginx-403-forbidden-for-all-files

@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-apt-get install -y libgmp3-dev libmpfr-dev libmpfr-doc libmpfr4 libmpfr4-dbg libmpc-dev build-essential libc6-dev-i386 zlib1g-dev libncurses-dev
+echo "Installing GCC..."
+
+apt-get install -y libgmp3-dev libmpfr-dev libmpfr-doc libmpfr4 libmpfr4-dbg libmpc-dev build-essential libc6-dev-i386 zlib1g-dev libncurses-dev libtool
 
 
 set -e
-source ${COMP_BENCH}/install/common.sh
+source ${PROJ_ROOT}/install/common.sh
 
-# ============
-# gcc
-# ============
 SRC_PATH="${BIN_PATH}/gcc/src"
 BUILD_PATH="${BIN_PATH}/gcc/build"
 INSTALL_PATH="/usr/"
@@ -36,44 +35,8 @@ make install
 
 cd -
 
-# ============
-# binutils
-# ============
-SRC_PATH="${BIN_PATH}/binutils/src"
-BUILD_PATH="${BIN_PATH}/binutils/build"
-VERSION="2.26.1"
+install_dependency "BinUtils" "${PROJ_ROOT}/install/dependencies/binutils.sh"
 
-mkdir -p ${BIN_PATH}/binutils
-download_and_link binutils-${VERSION} http://ftp.gnu.org/gnu/binutils/binutils-${VERSION}.tar.gz ${SRC_PATH}
-
-# configure
-mkdir -p ${BUILD_PATH}
-cd ${BUILD_PATH}
-CXXFLAGS="-Wno-unused-function -O2" ${SRC_PATH}/configure --enable-gold=yes --enable-ld=yes
-
-# install
-make -j8
-make install
-
-# ============
-# gdb
-# ============
-SRC_PATH="${BIN_PATH}/gdb/src"
-BUILD_PATH="${BIN_PATH}/gdb/build"
-VERSION="7.11"
-
-mkdir -p ${BIN_PATH}/gdb
-download_and_link gdb-${VERSION} http://ftp.gnu.org/gnu/gdb/gdb-${VERSION}.tar.gz ${SRC_PATH}
-
-# configure
-mkdir -p ${BUILD_PATH}
-cd ${BUILD_PATH}
-${SRC_PATH}/configure --enable-tui --enable-gold --enable-lto
-
-# install
-make -j8
-make install
-
-
-cd -
 set +e
+
+echo "GCC installed"

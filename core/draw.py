@@ -2,17 +2,16 @@
 Drawing plots
 """
 import logging
-import csv
 from abc import ABCMeta, abstractmethod, abstractproperty
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 import numpy as np
-from scipy.stats import trim_mean
-from scipy.stats.mstats import mode, gmean, hmean
+from scipy.stats.mstats import gmean
 
 from core import prepare
 from core import styles
+from config import Config
 
 
 class FexPlot:
@@ -21,6 +20,7 @@ class FexPlot:
     def __init__(self):
         self.df = None
         self.plot = None
+        self.conf = Config()
 
     @abstractproperty
     def StyleClass(self):
@@ -96,7 +96,7 @@ class LinePlotTput(FexPlot):
                     linewidth=3,
                     **kwargs
                 )
-                labels.append(prepare.BUILD_NAMES[build_names][key])
+                labels.append(self.conf.build_names[build_names][key])
                 idx += 1
 
         # get line styles for legend
@@ -158,7 +158,7 @@ class BarplotOverhead(FexPlot):
                    **kwargs):
 
         # rename builds
-        self.df.rename(columns=prepare.BUILD_NAMES[build_names], inplace=True)
+        self.df.rename(columns=self.conf.build_names[build_names], inplace=True)
 
         logging.info("Building plot")
 
@@ -174,9 +174,9 @@ class BarplotOverhead(FexPlot):
         )
         plot = style.apply(plot)
 
-        if kwargs.get("logy", False) == True:
+        if kwargs.get("logy", False):
             plot.set_yscale('log', basey=2)
-            plot.yaxis.set_major_formatter(plticker.LogFormatter(base=2))
+            plot.yaxis.set_major_formatter(plticker.FuncFormatter(lambda x, pos: str(int(x))))
 
         # parametrize labels
         plot.set_ylabel(ylabel, fontsize=10)
@@ -235,7 +235,7 @@ class BarplotClusteredStacked(FexPlot):
         style = self.StyleClass(need_hatching=False)
 
         # get build types and rename
-        xlabels = [prepare.BUILD_NAMES["long"].get(l, l) for l in xlabels]
+        xlabels = [self.conf.build_names["long"].get(l, l) for l in xlabels]
 
         # builds clusters
         df_bars = [g for _, g in self.df.groupby('compilertype')]
@@ -384,7 +384,7 @@ class VarBarplotOverhead(FexPlot):
             group = group.dropna()
             group = group.pivot_table(index="compilertype", columns="input", values="overhead", margins=False)
             group.rename(columns=prepare.INPUT_NAMES["long"], inplace=True)
-            group.rename(index=prepare.BUILD_NAMES["short"], inplace=True)
+            group.rename(index=self.conf.build_names["short"], inplace=True)
 
             style = self.StyleClass(need_hatching=False)
             subplot = group.plot(
@@ -398,9 +398,9 @@ class VarBarplotOverhead(FexPlot):
                 **kwargs
             )
 
-            if kwargs.get("logy", False) == True:
-                subplot.set_yscale('log', basey=2)
-                subplot.yaxis.set_major_formatter(plticker.LogFormatter(base=2))
+            if kwargs.get("logy", False):
+                plot.set_yscale('log', basey=2, nonposy='clip')
+                plot.yaxis.set_major_formatter(plticker.ScalarFormatter())
 
             subplot = style.apply(subplot)
             subplot.set_xlabel("", fontsize=0)  # remove x label
@@ -444,4 +444,4 @@ class VarBarplotOverhead(FexPlot):
 
 # Helper functions
 def compilertype_tinynames(compilertype):
-    return prepare.BUILD_NAMES["tiny"].get(compilertype, compilertype)
+    return Config().build_names["tiny"].get(compilertype, compilertype)
