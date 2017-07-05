@@ -32,7 +32,6 @@ In such occasions, please, create an issue or contact me directly.
 
 Full description of this work can be found in one of the follwing:
 
-* [ATC paper](): shortened form of our investigation (*not yet submitted*)
 * [Technical Report](https://arxiv.org/abs/1702.00719): complete results and full discussion
 * [Supporting website](https://intel-mpx.github.io/): even more detailed results, but less discussion
 
