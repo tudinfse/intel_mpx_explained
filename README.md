@@ -38,6 +38,17 @@ Full description of this work can be found in one of the follwing:
 
 ### Cite us!
 
+Paper:
+
+```
+@Article{Oleksenko:2018,
+  author = {Oleksenko, Oleksii and Kuvaiskii, Dmitrii and Bhatotia, Pramod and Felber, Pascal and Fetzer, Christof},
+  title = {{Intel MPX Explained: A Cross-layer Analysis of the Intel MPX System Stack}},
+  journal   = "Proceedings of the ACM on Measurement and Analysis of Computing Systems (POMACS)",
+  year = {2018},
+}
+```
+
 Technical Report:
 
 ```
