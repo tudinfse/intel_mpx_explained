@@ -3,12 +3,14 @@
 A repository containing complete experimental setup of our "Intel MPX Explained" paper:
 
 * `raw_results`: complete unprocessed measurements, in the form of `.csv` files.
-* `asm_measurements`: scripts used to measure MPX instruction latencies and throughputs.
+* `asm_measurements`: scripts used to measure MPX instruction latencies and throughput.
 Also, a set of scripts that prove existence of contention on Port 1.
 * `src`: sources of the tested benchmark suits and case studies. (SPEC was excluded for licencing reasons)
 * `experiments/exp_*_*/run.py`: scripts defining the experiment procedure
 * `experiments/makefiles/`: build types
 * `install`: installation scripts
+
+UPDATE (04-02-2020): At this point, Intel MPX support is officially discontinued by GCC ([Patch](https://gcc.gnu.org/ml/gcc-patches/2018-04/msg01225.html)) and Linux ([Patch](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ccaaaf6fe5a5e1fffca5cca0f3fc4ec84d7ae752)). The technology won't be available on the future Intel processors too ([Announcement](https://software.intel.com/en-us/blogs/2013/07/22/intel-memory-protection-extensions-intel-mpx-support-in-the-gnu-toolchain)).
 
 ### Running the experiments
 
